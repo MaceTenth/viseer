@@ -1,6 +1,0 @@
-
-[extract]
-trafilatura>=1.9
-
-[ui]
-rich>=13

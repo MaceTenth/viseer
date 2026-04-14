@@ -1,2 +1,0 @@
-[console_scripts]
-websearch-agents = websearch_agents.cli:main
