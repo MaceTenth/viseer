@@ -59,6 +59,15 @@ python examples/compare_tools.py
 python examples/compare_tools.py "OpenAI vs Anthropic pricing"
 ```
 
+Search then fetch one chosen source:
+
+```bash
+python examples/search_then_fetch.py
+python examples/search_then_fetch.py "Who founded Stripe?" --source-rank 2 --plain
+python examples/search_then_fetch.py "Who founded Stripe?" --source-rank 2 --json
+python examples/search_then_fetch.py "Who is the current CEO of Microsoft?" --strategy latest
+```
+
 Price consensus:
 
 ```bash

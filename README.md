@@ -157,6 +157,12 @@ Structured JSON:
 viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --json
 ```
 
+Multi-step search then fetch:
+
+```bash
+python examples/search_then_fetch.py "Who founded Stripe?" --source-rank 2 --plain
+```
+
 ## Sample Output
 
 These examples were generated on April 14, 2026 with the bundled local
@@ -265,7 +271,7 @@ Failures: 1
 
 ## Examples
 
-The [`examples/`](/README.md) folder has
+The [`examples/`](examples/README.md) folder has
 small wrappers for common patterns:
 
 ```bash
@@ -273,6 +279,7 @@ python examples/company_lookup.py
 python examples/latest_news.py
 python examples/fact_check.py
 python examples/compare_tools.py
+python examples/search_then_fetch.py
 python examples/price_check.py
 ```
 
@@ -303,6 +310,28 @@ This is useful for:
 - pulling a Wikipedia page into a structured payload
 - extracting article text without using the search flow
 - feeding clean page content into another tool or agent step
+
+## Search Then Fetch
+
+If you want a guided workflow, the multi-step example first runs search, shows the
+ranked sources, and then fetches one selected source as clean text or JSON.
+
+Search, then fetch the second result:
+
+```bash
+python examples/search_then_fetch.py "Who founded Stripe?" --source-rank 2 --plain
+```
+
+Combined JSON output:
+
+```bash
+python examples/search_then_fetch.py "Who founded Stripe?" --source-rank 2 --json
+```
+
+This is useful when:
+- search helps you discover candidate sources
+- the user wants to choose which page to inspect more deeply
+- you want one payload that includes both the search result and the fetched page
 
 ## Design principles
 
