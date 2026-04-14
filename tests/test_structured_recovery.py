@@ -113,6 +113,30 @@ class StructuredRecoveryTests(unittest.TestCase):
         self.assertEqual(document.metadata["structured_sources"], [])
         self.assertFalse(document.metadata["recovery_failed"])
 
+    def test_fallback_prefers_main_and_drops_common_chrome(self) -> None:
+        html = """
+        <html>
+          <body>
+            <header><a href="/">Home</a><a href="/login">Log in</a></header>
+            <nav>Menu Search Privacy Policy</nav>
+            <main>
+              <h1>Store title</h1>
+              <p>Minimal design, maximum impact.</p>
+              <p>Thoughtfully crafted essentials for everyday comfort.</p>
+            </main>
+            <footer>Privacy Policy Terms of Service</footer>
+          </body>
+        </html>
+        """
+
+        document = self.extractor.extract("https://example.com/store", html)
+
+        self.assertIsNotNone(document)
+        self.assertIn("Store title", document.text)
+        self.assertIn("Minimal design, maximum impact.", document.text)
+        self.assertNotIn("Log in", document.text)
+        self.assertNotIn("Privacy Policy", document.text)
+
 
 if __name__ == "__main__":
     unittest.main()

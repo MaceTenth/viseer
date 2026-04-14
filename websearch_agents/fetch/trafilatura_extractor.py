@@ -20,6 +20,19 @@ _SCRIPT_STYLE_RE = re.compile(
     r"<(script|style|noscript)[^>]*>.*?</\1>",
     re.IGNORECASE | re.DOTALL,
 )
+_BOILERPLATE_BLOCK_RE = re.compile(
+    r"<(header|nav|footer|aside|form|button|svg)[^>]*>.*?</\1>",
+    re.IGNORECASE | re.DOTALL,
+)
+_BLOCK_BREAK_RE = re.compile(
+    r"</?(p|div|section|article|main|li|ul|ol|h[1-6]|br|tr|td|th|blockquote)[^>]*>",
+    re.IGNORECASE,
+)
+_REGION_PATTERNS = [
+    re.compile(r"<article\b[^>]*>(.*?)</article>", re.IGNORECASE | re.DOTALL),
+    re.compile(r"<main\b[^>]*>(.*?)</main>", re.IGNORECASE | re.DOTALL),
+    re.compile(r"<body\b[^>]*>(.*?)</body>", re.IGNORECASE | re.DOTALL),
+]
 _DATE_PATTERNS = [
     re.compile(
         r'<meta[^>]+(?:property|name)=["\'](?:article:published_time|og:published_time|pubdate|date)["\'][^>]+content=["\']([^"\']+)["\']',
@@ -52,11 +65,44 @@ def _extract_published_at(html: str) -> str | None:
 
 
 def _fallback_extract_text(html: str) -> str:
-    html = _SCRIPT_STYLE_RE.sub(" ", html)
-    html = _COMMENT_RE.sub(" ", html)
-    html = _TAG_RE.sub(" ", html)
-    html = html_lib.unescape(html)
-    return _normalize_space(html)
+    region = html
+    for pattern in _REGION_PATTERNS:
+        match = pattern.search(html)
+        if match:
+            region = match.group(1)
+            break
+
+    region = _SCRIPT_STYLE_RE.sub(" ", region)
+    region = _BOILERPLATE_BLOCK_RE.sub(" ", region)
+    region = _COMMENT_RE.sub(" ", region)
+    region = _BLOCK_BREAK_RE.sub("\n", region)
+    region = _TAG_RE.sub(" ", region)
+    region = html_lib.unescape(region)
+
+    lines: list[str] = []
+    seen: set[str] = set()
+    for raw_line in re.split(r"[\r\n]+", region):
+        line = _normalize_space(raw_line)
+        if not line:
+            continue
+        lowered = line.lower()
+        if lowered in {
+            "skip to content",
+            "home",
+            "log in",
+            "sign in",
+            "privacy policy",
+            "terms of service",
+        }:
+            continue
+        if lowered.startswith(("cookie settings", "accept cookies", "manage preferences")):
+            continue
+        if line in seen:
+            continue
+        seen.add(line)
+        lines.append(line)
+
+    return "\n".join(lines)
 
 
 class TrafilaturaExtractor:

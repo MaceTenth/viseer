@@ -103,7 +103,7 @@ def main() -> None:
             except RuntimeError:
                 parser.exit(2, f"{RICH_INSTALL_MESSAGE}\n")
         else:
-            print(json.dumps(payload, indent=2))
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
         return
 
     if args.rich and not rich_enabled:
