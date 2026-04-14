@@ -57,10 +57,16 @@ def fetch_page_document(
         timeout=config.request_timeout,
         user_agent=config.user_agent,
     )
-    extractor = extractor or TrafilaturaExtractor()
+    extractor = extractor or TrafilaturaExtractor(
+        weak_text_threshold=config.weak_text_threshold,
+        max_json_fetches=config.recovery_json_limit,
+    )
 
     html = fetcher.fetch(url)
-    document = extractor.extract(url, html)
+    if isinstance(extractor, TrafilaturaExtractor):
+        document = extractor.extract(url, html, fetcher=fetcher)
+    else:
+        document = extractor.extract(url, html)
     if document is None:
         raise ValueError(f"Could not extract readable text from {url}")
     if not document.title:

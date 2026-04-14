@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 
 from websearch_agents.config import PipelineConfig
+from websearch_agents.fetch.trafilatura_extractor import TrafilaturaExtractor
 from websearch_agents.pipeline import SearchPipeline
 from websearch_agents.providers.mock import MockProvider
 from websearch_agents.strategies import VerifyClaimStrategy
@@ -77,6 +78,51 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(answer.trace.pages_fetched, 2)
         self.assertEqual(answer.trace.pages_extracted, 2)
         self.assertEqual(answer.trace.queries[0].query, "vaccines cause autism")
+
+    def test_pipeline_uses_structured_recovery_for_weak_pages(self) -> None:
+        provider = MockProvider(
+            {
+                "Who is the CEO of Microsoft?": [
+                    SearchResult(
+                        title="Hydrated source",
+                        url="https://example.com/microsoft",
+                        snippet="Hydrated source",
+                        source="mock",
+                    )
+                ],
+                "Who is the CEO of Microsoft? latest": [],
+                "Who is the CEO of Microsoft? official": [],
+                "Who is the CEO of Microsoft? today": [],
+            }
+        )
+        fetcher = StaticFetcher(
+            {
+                "https://example.com/microsoft": """
+                <html>
+                  <head>
+                    <title>Microsoft leadership</title>
+                    <script id="__NEXT_DATA__" type="application/json">
+                      {"props":{"pageProps":{"headline":"Leadership","content":"Satya Nadella is the Chairman and CEO of Microsoft."}}}
+                    </script>
+                  </head>
+                  <body><div id="__next"></div></body>
+                </html>
+                """
+            }
+        )
+        pipeline = SearchPipeline(
+            provider=provider,
+            strategy=VerifyClaimStrategy(),
+            config=PipelineConfig(max_evidence=3),
+            fetcher=fetcher,
+            extractor=TrafilaturaExtractor(),
+        )
+
+        answer = pipeline.run("Who is the CEO of Microsoft?")
+
+        self.assertEqual(len(answer.evidence), 1)
+        self.assertIn("Satya Nadella", answer.evidence[0].summary)
+        self.assertIn("hydration", answer.evidence[0].metadata["structured_sources"])
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ It helps agents:
 - search the web with SearXNG
 - fetch pages with the standard library
 - extract clean content with an optional `trafilatura` fast path
+- recover useful text from many JS-heavy pages without a browser
 - rank evidence with lightweight heuristics
 - validate claims or prices from multiple sources
 - return traceable answers with citations and a small execution trace
@@ -20,7 +21,7 @@ ranking, and citation output.
 
 - Provider interface plus SearXNG and mock providers
 - HTTP fetcher
-- `trafilatura` extractor with a built-in fallback extractor
+- `trafilatura` extractor with a built-in fallback extractor and structured-data recovery
 - Deterministic strategies for direct lookup, latest info, verification, comparisons, and pricing
 - Lightweight evidence ranking with URL dedupe, domain trust, and optional recency boosts
 - A price-consensus example that checks whether several sources agree
@@ -157,6 +158,10 @@ Structured JSON:
 viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --json
 ```
 
+JS-heavy pages are handled with a best-effort, no-browser recovery path that can
+pull text from embedded JSON-LD, hydration blobs such as `__NEXT_DATA__`, and
+same-origin JSON endpoints referenced in the page source.
+
 Multi-step search then fetch:
 
 ```bash
@@ -286,7 +291,8 @@ python examples/price_check.py
 ## Fetch One Page
 
 If you already know the page you want, Viseer can fetch it directly and return
-clean text in either readable text or structured JSON.
+clean text in either readable text or structured JSON. For JS-heavy pages, it
+will also try a no-browser recovery pass before giving up.
 
 Text output:
 
@@ -309,7 +315,21 @@ viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --max-chars 1500
 This is useful for:
 - pulling a Wikipedia page into a structured payload
 - extracting article text without using the search flow
+- recovering content from many framework-driven pages without Playwright/Puppeteer
 - feeding clean page content into another tool or agent step
+
+## JS-Heavy Pages
+
+Viseer does not use Playwright or Puppeteer. Instead, it stays lightweight and
+tries to recover useful content from:
+
+- JSON-LD and meta description blocks
+- hydration payloads such as `__NEXT_DATA__`, `__NUXT__`, or state blobs
+- same-origin JSON endpoints referenced by the initial HTML
+
+When that works, the output metadata shows which structured sources were used.
+When it does not, the page metadata and trace will explicitly mark the page as
+likely dynamic or unsupported.
 
 ## Search Then Fetch
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 
+from websearch_agents.fetch.trafilatura_extractor import TrafilaturaExtractor
 from websearch_agents.output_format import format_page_document_json, format_page_document_text
 from websearch_agents.page_fetch import fetch_page_document
 from websearch_agents.types import PageDocument
@@ -55,6 +56,30 @@ class PageFetchTests(unittest.TestCase):
         self.assertTrue(payload["result"]["text_truncated"])
         self.assertEqual(payload["kind"], "page_document")
         self.assertEqual(payload["result"]["word_count"], 6)
+
+    def test_page_fetch_json_includes_recovery_metadata(self) -> None:
+        html = """
+        <html>
+          <head>
+            <title>JS Article</title>
+            <script id="__NEXT_DATA__" type="application/json">
+              {"props":{"pageProps":{"headline":"Hydrated headline","body":"Hydrated body about Stripe founders."}}}
+            </script>
+          </head>
+          <body><div id="__next"></div></body>
+        </html>
+        """
+
+        document = fetch_page_document(
+            "https://example.com/article",
+            fetcher=StubFetcher(html),
+            extractor=TrafilaturaExtractor(),
+        )
+        payload = format_page_document_json(document)
+
+        self.assertIn("hydration", payload["metadata"]["structured_sources"])
+        self.assertIn("next_root", payload["metadata"]["dynamic_signals"])
+        self.assertIn("Hydrated headline", payload["result"]["text"])
 
 
 if __name__ == "__main__":

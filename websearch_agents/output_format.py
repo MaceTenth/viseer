@@ -29,12 +29,15 @@ def _strategy_label(name: str) -> str:
 def _trace_summary(trace: AnswerTrace | None) -> list[str]:
     if trace is None:
         return ["Queries: 0", "Pages fetched: 0", "Pages extracted: 0", "Failures: 0"]
-    return [
+    lines = [
         f"Queries: {len(trace.queries)}",
         f"Pages fetched: {trace.pages_fetched}",
         f"Pages extracted: {trace.pages_extracted}",
         f"Failures: {len(trace.failures)}",
     ]
+    for item in trace.failures[:3]:
+        lines.append(f"Failure: {_truncate(item.get('error', ''), length=120)}")
+    return lines
 
 
 def _document_counts(doc: PageDocument) -> tuple[int, int]:
@@ -152,6 +155,8 @@ def format_answer_json(answer: Answer) -> dict:
 def format_page_document_text(doc: PageDocument, max_chars: int | None = 4000) -> str:
     word_count, char_count = _document_counts(doc)
     text, truncated = _limit_text(doc.text, max_chars)
+    structured_sources = [str(item) for item in doc.metadata.get("structured_sources", [])]
+    dynamic_signals = [str(item) for item in doc.metadata.get("dynamic_signals", [])]
     details = [
         doc.title or "(untitled)",
         f"URL: {doc.url}",
@@ -162,6 +167,12 @@ def format_page_document_text(doc: PageDocument, max_chars: int | None = 4000) -
     ]
     if doc.published_at:
         details.append(f"Published: {doc.published_at}")
+    if structured_sources:
+        details.append(f"Structured sources: {', '.join(structured_sources)}")
+    if dynamic_signals:
+        details.append(f"Dynamic signals: {', '.join(dynamic_signals)}")
+    if doc.metadata.get("recovery_failed"):
+        details.append("Recovery: likely dynamic or unsupported page")
     if truncated:
         details.append(f"Text truncated to {max_chars} characters")
 

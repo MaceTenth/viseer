@@ -75,6 +75,8 @@ def _trace_table(modules: dict[str, object], trace: AnswerTrace | None):
     table.add_row("Pages fetched", str(pages_fetched))
     table.add_row("Pages extracted", str(pages_extracted))
     table.add_row("Failures", str(failures))
+    if trace is not None and trace.failures:
+        table.add_row("Last failure", trace.failures[0].get("error", "-"))
     return table
 
 
@@ -152,6 +154,12 @@ def print_page_document_rich(doc: PageDocument, *, max_chars: int | None = 4000)
     metadata.add_row("Characters", str(len(doc.text)))
     if doc.published_at:
         metadata.add_row("Published", doc.published_at)
+    if doc.metadata.get("structured_sources"):
+        metadata.add_row("Structured", ", ".join(doc.metadata["structured_sources"]))
+    if doc.metadata.get("dynamic_signals"):
+        metadata.add_row("Signals", ", ".join(doc.metadata["dynamic_signals"]))
+    if doc.metadata.get("recovery_failed"):
+        metadata.add_row("Recovery", "Likely dynamic or unsupported")
     if truncated:
         metadata.add_row("Truncated", f"Yes ({max_chars} chars)")
 

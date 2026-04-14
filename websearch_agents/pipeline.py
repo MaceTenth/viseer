@@ -25,7 +25,10 @@ class SearchPipeline:
             timeout=self.config.request_timeout,
             user_agent=self.config.user_agent,
         )
-        self.extractor = extractor or TrafilaturaExtractor()
+        self.extractor = extractor or TrafilaturaExtractor(
+            weak_text_threshold=self.config.weak_text_threshold,
+            max_json_fetches=self.config.recovery_json_limit,
+        )
         self.browser_fallback = browser_fallback
 
     def collect_documents(self, question: str, limit_per_query: int | None = None):
@@ -58,7 +61,10 @@ class SearchPipeline:
                 try:
                     html = self.fetcher.fetch(result.url)
                     fetched_count += 1
-                    doc = self.extractor.extract(result.url, html)
+                    if isinstance(self.extractor, TrafilaturaExtractor):
+                        doc = self.extractor.extract(result.url, html, fetcher=self.fetcher)
+                    else:
+                        doc = self.extractor.extract(result.url, html)
                     if doc is None and self.browser_fallback is not None:
                         doc = self.browser_fallback.fetch_and_extract(result.url)
                     if doc is None:
@@ -71,6 +77,13 @@ class SearchPipeline:
                     doc.metadata["search_snippet"] = result.snippet
                     docs.append(doc)
                     extracted_count += 1
+                    if doc.metadata.get("recovery_failed"):
+                        failures.append(
+                            {
+                                "url": result.url,
+                                "error": "likely dynamic or unsupported page; structured recovery failed",
+                            }
+                        )
                 except Exception as exc:  # pragma: no cover - exercised via tests with fake exceptions
                     failures.append({"url": result.url, "error": str(exc)})
 

@@ -5,6 +5,7 @@ import html as html_lib
 import re
 
 from ..types import PageDocument
+from .structured_recovery import recover_structured_text
 
 try:
     import trafilatura as _trafilatura
@@ -59,9 +60,21 @@ def _fallback_extract_text(html: str) -> str:
 
 
 class TrafilaturaExtractor:
-    def extract(self, url: str, html: str) -> PageDocument | None:
+    def __init__(self, *, weak_text_threshold: int = 400, max_json_fetches: int = 2):
+        self.weak_text_threshold = weak_text_threshold
+        self.max_json_fetches = max_json_fetches
+
+    def extract(self, url: str, html: str, fetcher=None) -> PageDocument | None:
         text = ""
         method = "fallback"
+        title = _extract_title(html)
+        published_at = _extract_published_at(html)
+        metadata = {
+            "structured_sources": [],
+            "dynamic_signals": [],
+            "recovery_attempts": [],
+            "recovery_failed": False,
+        }
 
         if _trafilatura is not None:
             text = _trafilatura.extract(
@@ -75,14 +88,40 @@ class TrafilaturaExtractor:
         if not text:
             text = _fallback_extract_text(html)
 
-        if not text:
+        recovery = None
+        if len(text.strip()) < self.weak_text_threshold:
+            recovery = recover_structured_text(
+                url=url,
+                html=html,
+                fetcher=fetcher,
+                title=title,
+                max_json_fetches=self.max_json_fetches,
+            )
+            metadata.update(recovery)
+            recovered_text = str(recovery.get("text", "")).strip()
+            if recovered_text:
+                base_text = text.strip()
+                base_is_insubstantial = not base_text or base_text == title or len(base_text) < 80
+                if base_text and not base_is_insubstantial:
+                    if recovered_text not in base_text:
+                        text = "\n\n".join(part for part in (text.strip(), recovered_text) if part)
+                    method = "hybrid"
+                else:
+                    text = recovered_text
+                    sources = metadata.get("structured_sources") or []
+                    method = sources[0] if len(sources) == 1 else "hybrid"
+            elif metadata["recovery_failed"] and not text:
+                text = title
+
+        if not text and not title and not metadata["dynamic_signals"]:
             return None
 
         return PageDocument(
             url=url,
-            title=_extract_title(html),
+            title=title,
             text=text,
             fetched_at=datetime.now(UTC).isoformat(),
-            published_at=_extract_published_at(html),
+            published_at=published_at,
             extraction_method=method,
+            metadata=metadata,
         )

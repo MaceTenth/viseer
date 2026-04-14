@@ -142,9 +142,10 @@ def rank_documents(
     ranked: list[Evidence] = []
 
     for doc in docs:
-        doc_terms = set(_tokenize(doc.text))
+        content = " ".join(part for part in (doc.title, doc.text) if part).strip()
+        doc_terms = set(_tokenize(content))
         overlap = float(len(question_terms & doc_terms))
-        quote = _best_quote(question, doc.text)
+        quote = _best_quote(question, content)
         score = overlap + domain_bonus(doc.url) + (recency_weight * recency_bonus(doc.published_at))
 
         ranked.append(
@@ -152,10 +153,10 @@ def rank_documents(
                 url=doc.url,
                 title=doc.title or doc.url,
                 quote=quote,
-                summary=_summary(doc.text),
+                summary=_summary(content),
                 score=score,
                 published_at=doc.published_at,
-                metadata={"extraction_method": doc.extraction_method},
+                metadata={**doc.metadata, "extraction_method": doc.extraction_method},
             )
         )
 
