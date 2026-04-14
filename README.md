@@ -36,16 +36,30 @@ ranking, and citation output.
 
 ## Install
 
+### Global install (recommended for CLI use)
+
+Clone the repo and run the install script — it sets up a virtual environment,
+installs the package, and adds `viseer` and `viseer-fetch` to your shell
+profile automatically. Supports zsh, bash, fish, and ksh.
+
+```bash
+git clone https://github.com/yourname/viseer.git
+cd viseer
+chmod +x install.sh
+./install.sh
+```
+
+Open a new terminal and `viseer` will be available everywhere.
+
+### Manual / development install
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 ```
 
-This installs two shell commands:
-
-- `viseer` for search, validation, and comparison
-- `viseer-fetch` for fetching one known page as clean text or JSON
+Commands are available while the venv is active.
 
 If you are working from source and prefer Python module invocation, these are
 equivalent:
