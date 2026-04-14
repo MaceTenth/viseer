@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "viseer"
+version = "0.1.0"
+description = "Viseer is a minimal, OSS-first toolkit for reliable agent web search and validation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Codex" }]
+dependencies = []
+
+[project.optional-dependencies]
+extract = ["trafilatura>=1.9"]
+ui = ["rich>=13"]
+
+[project.scripts]
+viseer = "websearch_agents.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["websearch_agents", "websearch_agents.*"]

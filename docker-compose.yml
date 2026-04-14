@@ -1,0 +1,26 @@
+services:
+  valkey:
+    image: docker.io/valkey/valkey:8-alpine
+    command: valkey-server --save 30 1 --loglevel warning
+    restart: unless-stopped
+    volumes:
+      - valkey-data:/data
+
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    depends_on:
+      - valkey
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./searxng:/etc/searxng:ro
+      - searxng-cache:/var/cache/searxng
+    environment:
+      SEARXNG_BASE_URL: http://localhost:8080/
+      SEARXNG_SECRET: change-this-secret
+      SEARXNG_VALKEY_URL: valkey://valkey:6379/0
+
+volumes:
+  valkey-data:
+  searxng-cache:
