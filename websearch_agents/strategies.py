@@ -122,13 +122,14 @@ class PriceValidationStrategy(SearchStrategy):
 
     name = "price_validation"
     recency_weight = 0.5
+    excluded_hosts = ("reddit.com", "youtube.com", "youtu.be", "wikipedia.org")
 
     def build_queries(self, question: str) -> list[str]:
         return [
             question,
             f"{question} price",
             f"{question} official price",
-            f"{question} buy",
+            f"{question} official pricing",
             f"{question} MSRP",
         ]
 
