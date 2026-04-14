@@ -145,6 +145,112 @@ Price validation example:
 python examples/price_check.py "MacBook M4 price"
 ```
 
+## Sample Output
+
+These examples were generated on April 14, 2026 with the bundled local
+SearXNG stack. Output is abridged for readability, and the exact sources,
+scores, and snippets will change over time.
+
+Direct lookup:
+
+```bash
+viseer "Who founded Stripe?" --strategy direct --plain
+```
+
+```text
+QUESTION
+Who founded Stripe?
+
+STRATEGY
+Direct Lookup
+
+SUMMARY
+Collected 4 evidence item(s) using direct_lookup. Top source: Stripe co-founder
+and CEO Patrick Collison on "prizing the small details" - Haas News | UC
+Berkeley Haas (2024-04-30T16:49:40+00:00).
+
+TOP SOURCES
+[1] Stripe co-founder and CEO Patrick Collison on "prizing the small details" - Haas News | UC Berkeley Haas
+    Score: 4.50
+    Published: 2024-04-30T16:49:40+00:00
+[2] Stripe, Inc. - Wikipedia
+    Score: 3.00
+
+TRACE
+Queries: 1
+Pages fetched: 4
+Pages extracted: 4
+Failures: 1
+```
+
+Claim validation:
+
+```bash
+viseer "Is acetaminophen anti-inflammatory?" --strategy verify --plain
+```
+
+```text
+QUESTION
+Is acetaminophen anti-inflammatory?
+
+STRATEGY
+Verify Claim
+
+SUMMARY
+Collected 4 evidence item(s) using verify_claim. Top source:
+NSAIDs vs. Acetaminophen: Which Over-the-Counter Medicine Should I Use?
+| Yale Medicine (2023-03-17T00:00:00).
+
+TOP SOURCES
+[1] Yale Medicine
+    Score: 4.00
+[2] Healthline
+    Score: 4.00
+[3] TYLENOL®
+    Score: 4.00
+
+TRACE
+Queries: 1
+Pages fetched: 4
+Pages extracted: 4
+Failures: 1
+```
+
+Price validation:
+
+```bash
+python examples/price_check.py "ChatGPT Team pricing" --plain
+```
+
+```text
+QUESTION
+ChatGPT Team pricing
+
+VERDICT
+mixed (confidence=0.20)
+
+SUMMARY
+Consensus price: USD 30.00 based on 1 independent source(s). 1 source(s)
+disagreed or showed another price.
+
+RULE
+Supported requires at least 3 independent source(s).
+
+AGREEING SOURCES
+[1] Content Whale
+    Price: USD 30.00
+
+CONFLICTING SOURCES
+[1] IntuitionLabs
+    Price: USD 20.00
+
+TRACE
+Queries: 1
+Pages fetched: 4
+Pages extracted: 4
+Failures: 1
+```
+
 ## Examples
 
 The [`examples/`](/README.md) folder has
