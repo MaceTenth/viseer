@@ -1,6 +1,18 @@
 # Viseer
 
+```text
+__     ___                   
+\ \   / (_)___  ___  ___ _ __
+ \ \ / /| / __|/ _ \/ _ \ '__|
+  \ V / | \__ \  __/  __/ |   
+   \_/  |_|___/\___|\___|_|   
+```
+
 Viseer: grounded search and validation for AI agents.
+
+In Old Norse and modern Icelandic, `visir` literally translates to
+"pointer," "indicator," or "index." That is exactly what a search tool does:
+it points the agent toward the correct external data.
 
 It helps agents:
 - search the web with SearXNG
