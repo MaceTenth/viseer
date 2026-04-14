@@ -36,6 +36,19 @@ source .venv/bin/activate
 pip install -e .
 ```
 
+This installs two shell commands:
+
+- `viseer` for search, validation, and comparison
+- `viseer-fetch` for fetching one known page as clean text or JSON
+
+If you are working from source and prefer Python module invocation, these are
+equivalent:
+
+```bash
+python -m websearch_agents.cli "Who founded Stripe?"
+python -m websearch_agents.page_fetch "https://en.wikipedia.org/wiki/Stripe,_Inc."
+```
+
 If you want better HTML extraction:
 
 ```bash
@@ -85,9 +98,25 @@ Stop it:
 docker compose down
 ```
 
+## Command Guide
+
+Use `viseer` when you want to search first:
+
+- direct lookup questions
+- latest info questions
+- claim verification
+- comparisons
+- price checks
+
+Use `viseer-fetch` when you already know the page URL and want the extracted
+content directly.
+
+Use `python examples/...` only for optional demos and multi-step workflows.
+They are not required for normal usage.
+
 ## Run
 
-With the bundled Docker setup running, this is the shortest path:
+With the bundled Docker setup running, this is the shortest path for search:
 
 ```bash
 viseer \
@@ -146,7 +175,7 @@ Price validation example:
 python examples/price_check.py "MacBook M4 price"
 ```
 
-Fetch and extract a single page:
+Fetch and extract a single known page:
 
 ```bash
 viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc."
@@ -276,8 +305,14 @@ Failures: 1
 
 ## Examples
 
-The [`examples/`](examples/README.md) folder has
-small wrappers for common patterns:
+The [`examples/`](examples/README.md) folder contains optional helper scripts.
+Use them when you want demo workflows or copy-paste patterns. For most users,
+the main interface is still:
+
+- `viseer`
+- `viseer-fetch`
+
+The optional scripts are:
 
 ```bash
 python examples/company_lookup.py

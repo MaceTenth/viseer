@@ -3,6 +3,17 @@
 These scripts are thin wrappers around the main package. They are useful when
 you want copy-paste commands for a few common query patterns.
 
+They are optional. The main installed commands are:
+
+- `viseer` for search and validation
+- `viseer-fetch` for direct page extraction
+
+Use the example scripts when you want:
+
+- demo queries
+- multi-step workflows
+- shortcuts while developing locally
+
 Before running the examples, start the bundled local SearXNG:
 
 ```bash
