@@ -145,6 +145,18 @@ Price validation example:
 python examples/price_check.py "MacBook M4 price"
 ```
 
+Fetch and extract a single page:
+
+```bash
+viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc."
+```
+
+Structured JSON:
+
+```bash
+viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --json
+```
+
 ## Sample Output
 
 These examples were generated on April 14, 2026 with the bundled local
@@ -263,6 +275,34 @@ python examples/fact_check.py
 python examples/compare_tools.py
 python examples/price_check.py
 ```
+
+## Fetch One Page
+
+If you already know the page you want, Viseer can fetch it directly and return
+clean text in either readable text or structured JSON.
+
+Text output:
+
+```bash
+viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc."
+```
+
+JSON output:
+
+```bash
+viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --json
+```
+
+Limit the amount of extracted text:
+
+```bash
+viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --max-chars 1500
+```
+
+This is useful for:
+- pulling a Wikipedia page into a structured payload
+- extracting article text without using the search flow
+- feeding clean page content into another tool or agent step
 
 ## Design principles
 

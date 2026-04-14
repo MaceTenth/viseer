@@ -18,6 +18,7 @@ ui = ["rich>=13"]
 
 [project.scripts]
 viseer = "websearch_agents.cli:main"
+viseer-fetch = "websearch_agents.page_fetch:main"
 
 [tool.setuptools.packages.find]
 include = ["websearch_agents", "websearch_agents.*"]

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from .price_validation import PriceConsensusResult
-from .types import Answer, AnswerTrace, Citation, Evidence, QueryTrace
+from .types import Answer, AnswerTrace, Citation, Evidence, PageDocument, QueryTrace
 
 SCHEMA_VERSION = "1.0"
 
@@ -35,6 +35,18 @@ def _trace_summary(trace: AnswerTrace | None) -> list[str]:
         f"Pages extracted: {trace.pages_extracted}",
         f"Failures: {len(trace.failures)}",
     ]
+
+
+def _document_counts(doc: PageDocument) -> tuple[int, int]:
+    text = _clean_text(doc.text)
+    return len(text.split()), len(text)
+
+
+def _limit_text(text: str, max_chars: int | None) -> tuple[str, bool]:
+    clean = _clean_text(text)
+    if max_chars is None or max_chars <= 0 or len(clean) <= max_chars:
+        return clean, False
+    return clean[:max_chars].rstrip() + "...", True
 
 
 def _query_trace_to_dict(trace: QueryTrace) -> dict:
@@ -134,6 +146,55 @@ def format_answer_json(answer: Answer) -> dict:
         ],
         "trace": _trace_to_dict(answer.trace),
         "metadata": answer.metadata,
+    }
+
+
+def format_page_document_text(doc: PageDocument, max_chars: int | None = 4000) -> str:
+    word_count, char_count = _document_counts(doc)
+    text, truncated = _limit_text(doc.text, max_chars)
+    details = [
+        doc.title or "(untitled)",
+        f"URL: {doc.url}",
+        f"Extraction: {doc.extraction_method}",
+        f"Fetched: {doc.fetched_at}",
+        f"Words: {word_count}",
+        f"Characters: {char_count}",
+    ]
+    if doc.published_at:
+        details.append(f"Published: {doc.published_at}")
+    if truncated:
+        details.append(f"Text truncated to {max_chars} characters")
+
+    return "\n\n".join(
+        [
+            _section("PAGE", details),
+            _section("TEXT", [text or "No text extracted."]),
+        ]
+    )
+
+
+def format_page_document_json(doc: PageDocument, max_chars: int | None = None) -> dict:
+    word_count, char_count = _document_counts(doc)
+    text, truncated = _limit_text(doc.text, max_chars)
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "kind": "page_document",
+        "request": {
+            "url": doc.url,
+            "max_chars": max_chars,
+        },
+        "result": {
+            "title": doc.title,
+            "url": doc.url,
+            "published_at": doc.published_at,
+            "fetched_at": doc.fetched_at,
+            "extraction_method": doc.extraction_method,
+            "word_count": word_count,
+            "char_count": char_count,
+            "text": text,
+            "text_truncated": truncated,
+        },
+        "metadata": doc.metadata,
     }
 
 

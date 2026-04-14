@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import importlib
 
-from .types import Answer, AnswerTrace
+from .types import Answer, AnswerTrace, PageDocument
 
 RICH_INSTALL_MESSAGE = "Rich output requested, but `rich` is not installed. Install with `pip install -e .[ui]`."
 
@@ -123,6 +123,46 @@ def print_answer_rich(answer: Answer) -> None:
 
     console.print(Panel(sources, title="Top Sources", border_style="green"))
     console.print(Panel(_trace_table(modules, answer.trace), title="Trace", border_style="yellow"))
+
+
+def print_page_document_rich(doc: PageDocument, *, max_chars: int | None = 4000) -> None:
+    modules = _load_rich()
+    Console = modules["Console"]
+    Group = modules["Group"]
+    Panel = modules["Panel"]
+    Table = modules["Table"]
+    Text = modules["Text"]
+    box = modules["box"]
+
+    console = Console()
+    text = doc.text.strip()
+    truncated = False
+    if max_chars is not None and max_chars > 0 and len(text) > max_chars:
+        text = text[:max_chars].rstrip() + "..."
+        truncated = True
+
+    metadata = Table(box=box.MINIMAL_DOUBLE_HEAD, expand=True, show_header=False)
+    metadata.add_column("Key", style="bold cyan", width=14)
+    metadata.add_column("Value", style="white")
+    metadata.add_row("Title", doc.title or "(untitled)")
+    metadata.add_row("URL", doc.url)
+    metadata.add_row("Extraction", doc.extraction_method)
+    metadata.add_row("Fetched", doc.fetched_at)
+    metadata.add_row("Words", str(len(doc.text.split())))
+    metadata.add_row("Characters", str(len(doc.text)))
+    if doc.published_at:
+        metadata.add_row("Published", doc.published_at)
+    if truncated:
+        metadata.add_row("Truncated", f"Yes ({max_chars} chars)")
+
+    console.print(Panel(metadata, title="Page", border_style="blue"))
+    console.print(
+        Panel(
+            Group(Text(text or "No text extracted.", style="white")),
+            title="Text",
+            border_style="green",
+        )
+    )
 
 
 def print_price_result_rich(
