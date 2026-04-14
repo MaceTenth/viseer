@@ -1,6 +1,6 @@
 # Viseer
 
-A minimal, OSS-first toolkit for reliable web search in LLM agents.
+Viseer: grounded search and validation for AI agents.
 
 It helps agents:
 - search the web with SearXNG

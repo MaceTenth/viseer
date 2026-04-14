@@ -20,7 +20,7 @@ from .strategies import resolve_strategy
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Viseer: minimal web search for agents.")
+    parser = argparse.ArgumentParser(description="Viseer: grounded search and validation for AI agents.")
     parser.add_argument("question")
     parser.add_argument(
         "--searxng-url",

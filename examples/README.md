@@ -35,7 +35,6 @@ Direct lookup:
 ```bash
 python examples/company_lookup.py
 python examples/company_lookup.py "Who is the CEO of Nvidia?"
-python examples/company_lookup.py "Who is the CEO of Nvidia?"
 python examples/company_lookup.py "Who is the CEO of Nvidia?" --plain
 ```
 

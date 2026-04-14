@@ -1,1 +1,4 @@
-*edd
+*egg*/
+__pycache__/
+*.pyc
+*.egg-info/
