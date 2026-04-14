@@ -1,12 +1,6 @@
 # Viseer
 
-```text
-__     ___                   
-\ \   / (_)___  ___  ___ _ __
- \ \ / /| / __|/ _ \/ _ \ '__|
-  \ V / | \__ \  __/  __/ |   
-   \_/  |_|___/\___|\___|_|   
-```
+![Viseer](assets/viseer_back.jpg)
 
 Viseer: grounded search and validation for AI agents.
 
@@ -122,6 +116,9 @@ Use `viseer` when you want to search first:
 
 Use `viseer-fetch` when you already know the page URL and want the extracted
 content directly.
+
+For `--strategy latest`, Viseer excludes `wikipedia.org` results by default so
+time-sensitive queries stay focused on fresher and more direct sources.
 
 Use `python examples/...` only for optional demos and multi-step workflows.
 They are not required for normal usage.

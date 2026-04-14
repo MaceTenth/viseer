@@ -6,7 +6,7 @@ from websearch_agents.config import PipelineConfig
 from websearch_agents.fetch.trafilatura_extractor import TrafilaturaExtractor
 from websearch_agents.pipeline import SearchPipeline
 from websearch_agents.providers.mock import MockProvider
-from websearch_agents.strategies import VerifyClaimStrategy
+from websearch_agents.strategies import LatestInfoStrategy, VerifyClaimStrategy
 from websearch_agents.types import PageDocument, SearchResult
 
 
@@ -123,6 +123,50 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(len(answer.evidence), 1)
         self.assertIn("Satya Nadella", answer.evidence[0].summary)
         self.assertIn("hydration", answer.evidence[0].metadata["structured_sources"])
+
+    def test_latest_strategy_excludes_wikipedia_results(self) -> None:
+        provider = MockProvider(
+            {
+                "Who is the current CEO of Microsoft?": [
+                    SearchResult(
+                        title="Microsoft - Wikipedia",
+                        url="https://en.wikipedia.org/wiki/Microsoft",
+                        snippet="Wikipedia page",
+                        source="mock",
+                    ),
+                    SearchResult(
+                        title="Microsoft leadership",
+                        url="https://www.microsoft.com/en-us/about/leadership",
+                        snippet="Leadership page",
+                        source="mock",
+                    ),
+                ],
+                "Who is the current CEO of Microsoft? latest": [],
+                "Who is the current CEO of Microsoft? official": [],
+                "Who is the current CEO of Microsoft? today": [],
+            }
+        )
+        fetcher = StaticFetcher(
+            {
+                "https://www.microsoft.com/en-us/about/leadership": (
+                    "Satya Nadella is Chairman and CEO of Microsoft."
+                ),
+            }
+        )
+        pipeline = SearchPipeline(
+            provider=provider,
+            strategy=LatestInfoStrategy(),
+            config=PipelineConfig(max_evidence=3),
+            fetcher=fetcher,
+            extractor=StaticExtractor(),
+        )
+
+        answer = pipeline.run("Who is the current CEO of Microsoft?")
+
+        self.assertEqual(len(answer.evidence), 1)
+        self.assertEqual(answer.evidence[0].url, "https://www.microsoft.com/en-us/about/leadership")
+        self.assertEqual(answer.trace.pages_fetched, 1)
+        self.assertEqual(answer.trace.queries[0].urls, ["https://www.microsoft.com/en-us/about/leadership"])
 
 
 if __name__ == "__main__":

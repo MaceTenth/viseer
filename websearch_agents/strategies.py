@@ -4,12 +4,17 @@ from __future__ import annotations
 class SearchStrategy:
     name = "direct_lookup"
     recency_weight = 0.0
+    excluded_hosts: tuple[str, ...] = ()
 
     def build_queries(self, question: str) -> list[str]:
         return [question]
 
     def should_stop(self, evidence_count: int) -> bool:
         return evidence_count >= 3
+
+    def allows_url(self, url: str) -> bool:
+        lowered = url.lower()
+        return not any(host in lowered for host in self.excluded_hosts)
 
 
 class DirectLookupStrategy(SearchStrategy):
@@ -42,6 +47,7 @@ class LatestInfoStrategy(SearchStrategy):
 
     name = "latest_info"
     recency_weight = 1.0
+    excluded_hosts = ("wikipedia.org",)
 
     def build_queries(self, question: str) -> list[str]:
         return [

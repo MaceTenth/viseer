@@ -43,7 +43,11 @@ class SearchPipeline:
         seen_urls: set[str] = set()
 
         for query in queries:
-            query_results = dedupe_search_results(self.provider.search(query, limit=per_query_limit))
+            query_results = [
+                result
+                for result in dedupe_search_results(self.provider.search(query, limit=per_query_limit))
+                if self.strategy.allows_url(result.url)
+            ]
             query_traces.append(
                 QueryTrace(
                     query=query,
