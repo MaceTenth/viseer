@@ -370,6 +370,36 @@ Limit the amount of extracted text:
 viseer-fetch "https://en.wikipedia.org/wiki/Stripe,_Inc." --max-chars 1500
 ```
 
+### Sample output
+
+```bash
+viseer-fetch "https://en.wikipedia.org/wiki/Old_Norse" --max-chars 800 --plain
+```
+
+```text
+PAGE
+Old Norse - Wikipedia
+URL: https://en.wikipedia.org/wiki/Old_Norse
+Extraction: fallback
+Fetched: 2026-04-15T13:14:27+00:00
+Words: 15727
+Characters: 89434
+Text truncated to 800 characters
+
+TEXT
+From Wikipedia, the free encyclopedia
+North Germanic language
+The term Old Norse can also refer specifically to Old West Norse.
+Not to be confused with Old North or Old Norwegian.
+Old Norse — also called Old Nordic or Old Scandinavian — was spoken in
+Scandinavia, Iceland, the Faroe Islands, Greenland and other Norse
+settlements. Native to the Norsemen and their descendants, it evolved
+from Proto-Norse in the 8th century and developed into the various
+North Germanic languages by the 15th century.
+Writing systems: Runic, later Latin script.
+...
+```
+
 This is useful for:
 - pulling a Wikipedia page into a structured payload
 - extracting article text without using the search flow
