@@ -59,16 +59,6 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-Commands are available while the venv is active.
-
-If you are working from source and prefer Python module invocation, these are
-equivalent:
-
-```bash
-python -m websearch_agents.cli "Who founded Stripe?"
-python -m websearch_agents.page_fetch "https://en.wikipedia.org/wiki/Stripe,_Inc."
-```
-
 If you want better HTML extraction:
 
 ```bash
