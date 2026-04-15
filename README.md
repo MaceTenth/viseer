@@ -222,11 +222,17 @@ python examples/search_then_fetch.py "Who founded Stripe?" --source-rank 2 --pla
 
 ## Sample Output
 
-These examples were generated on April 14, 2026 with the bundled local
-SearXNG stack. Output is abridged for readability, and the exact sources,
-scores, and snippets will change over time.
+These examples were generated on April 15, 2026 
 
-Direct lookup:
+Rich terminal output:
+
+```bash
+viseer "Who is the CEO of Anthropic?" --strategy direct
+```
+
+![Rich terminal output](assets/terminal.png)
+
+Direct lookup (plain):
 
 ```bash
 viseer "Who founded Stripe?" --strategy direct --plain
