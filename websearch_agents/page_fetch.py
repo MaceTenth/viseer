@@ -7,6 +7,8 @@ from urllib.error import URLError
 
 from .config import PipelineConfig
 from .fetch.http_fetcher import HttpFetcher
+from .fetch.reddit import RedditThreadFetcher, is_reddit_thread_url
+from .fetch.reddit_extractor import RedditThreadExtractor
 from .fetch.trafilatura_extractor import TrafilaturaExtractor
 from .output_format import format_page_document_json, format_page_document_text
 from .rich_output import (
@@ -53,14 +55,31 @@ def fetch_page_document(
     extractor: TrafilaturaExtractor | None = None,
 ) -> PageDocument:
     config = config or PipelineConfig.from_env()
-    fetcher = fetcher or HttpFetcher(
-        timeout=config.request_timeout,
-        user_agent=config.user_agent,
-    )
-    extractor = extractor or TrafilaturaExtractor(
-        weak_text_threshold=config.weak_text_threshold,
-        max_json_fetches=config.recovery_json_limit,
-    )
+    if fetcher is None:
+        if is_reddit_thread_url(url):
+            fetcher = RedditThreadFetcher(
+                timeout=config.request_timeout,
+                user_agent=config.user_agent,
+                comment_limit=config.reddit_comment_limit,
+                bearer_token=config.reddit_bearer_token,
+            )
+        else:
+            fetcher = HttpFetcher(
+                timeout=config.request_timeout,
+                user_agent=config.user_agent,
+            )
+    if extractor is None:
+        if is_reddit_thread_url(url):
+            extractor = RedditThreadExtractor(
+                max_comments=config.reddit_comment_limit,
+                weak_text_threshold=config.weak_text_threshold,
+                max_json_fetches=config.recovery_json_limit,
+            )
+        else:
+            extractor = TrafilaturaExtractor(
+                weak_text_threshold=config.weak_text_threshold,
+                max_json_fetches=config.recovery_json_limit,
+            )
 
     html = fetcher.fetch(url)
     if isinstance(extractor, TrafilaturaExtractor):

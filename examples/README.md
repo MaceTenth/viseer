@@ -56,6 +56,13 @@ python examples/latest_news.py
 python examples/latest_news.py "What is the latest CPI reading in the United States?"
 ```
 
+Reddit/community search:
+
+```bash
+python examples/company_lookup.py "Framework laptop long term experience" --provider reddit --strategy reddit
+python examples/company_lookup.py "best debugging tools" --provider reddit --strategy reddit --subreddit Python --reddit-sort top --reddit-time year
+```
+
 Claim verification:
 
 ```bash

@@ -3,7 +3,12 @@ from __future__ import annotations
 from .config import PipelineConfig
 from .fetch.http_fetcher import HttpFetcher
 from .fetch.trafilatura_extractor import TrafilaturaExtractor
-from .ranking import dedupe_search_results, normalize_url, rank_documents
+from .ranking import (
+    dedupe_search_results,
+    discover_preferred_domain_families,
+    normalize_url,
+    rank_documents,
+)
 from .synthesis import build_citations, render_answer
 from .types import Answer, AnswerTrace, QueryTrace
 
@@ -30,6 +35,7 @@ class SearchPipeline:
             max_json_fetches=self.config.recovery_json_limit,
         )
         self.browser_fallback = browser_fallback
+        self._last_preferred_domain_families: set[str] = set()
 
     def collect_documents(self, question: str, limit_per_query: int | None = None):
         per_query_limit = limit_per_query or self.config.search_limit
@@ -41,6 +47,7 @@ class SearchPipeline:
         fetched_count = 0
         extracted_count = 0
         seen_urls: set[str] = set()
+        seen_results = []
 
         for query in queries:
             query_results = [
@@ -48,6 +55,7 @@ class SearchPipeline:
                 for result in dedupe_search_results(self.provider.search(query, limit=per_query_limit))
                 if self.strategy.allows_url(result.url)
             ]
+            seen_results.extend(query_results)
             query_traces.append(
                 QueryTrace(
                     query=query,
@@ -91,10 +99,22 @@ class SearchPipeline:
                 except Exception as exc:  # pragma: no cover - exercised via tests with fake exceptions
                     failures.append({"url": result.url, "error": str(exc)})
 
-            ranked = rank_documents(question, docs, recency_weight=self.strategy.recency_weight)
+            preferred_domain_families = discover_preferred_domain_families(question, seen_results)
+            ranked = rank_documents(
+                question,
+                docs,
+                recency_weight=self.strategy.recency_weight,
+                strategy_name=self.strategy.name,
+                preferred_domain_families=preferred_domain_families,
+            )
             enough_evidence = [item for item in ranked if item.score > 0]
             if self.strategy.should_stop(len(enough_evidence)):
                 break
+
+        preferred_domain_families = discover_preferred_domain_families(question, seen_results)
+        self._last_preferred_domain_families = preferred_domain_families
+        for doc in docs:
+            doc.metadata["official_domain_candidates"] = sorted(preferred_domain_families)
 
         trace = AnswerTrace(
             queries=query_traces,
@@ -106,7 +126,13 @@ class SearchPipeline:
 
     def run(self, question: str, limit_per_query: int | None = None) -> Answer:
         docs, trace = self.collect_documents(question, limit_per_query=limit_per_query)
-        ranked = rank_documents(question, docs, recency_weight=self.strategy.recency_weight)
+        ranked = rank_documents(
+            question,
+            docs,
+            recency_weight=self.strategy.recency_weight,
+            strategy_name=self.strategy.name,
+            preferred_domain_families=self._last_preferred_domain_families,
+        )
         evidence = [item for item in ranked if item.score > 0][: self.config.max_evidence]
         if not evidence:
             evidence = ranked[: self.config.max_evidence]

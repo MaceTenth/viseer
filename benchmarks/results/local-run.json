@@ -1,0 +1,1044 @@
+{
+  "schema_version": "1.0",
+  "run": {
+    "started_at": "2026-04-16T10:50:41.777392+00:00",
+    "finished_at": "2026-04-16T10:51:40.042327+00:00",
+    "task_count": 8,
+    "searxng_url": "http://localhost:8080"
+  },
+  "summary": {
+    "task_count": 8,
+    "pass_count": 3,
+    "mixed_count": 5,
+    "fail_count": 0,
+    "median_latency_ms": 7932,
+    "average_automatic_score": 0.78,
+    "by_category": {
+      "grounded_search": {
+        "task_count": 1,
+        "pass_count": 0,
+        "mixed_count": 1,
+        "fail_count": 0
+      },
+      "latest_info": {
+        "task_count": 1,
+        "pass_count": 1,
+        "mixed_count": 0,
+        "fail_count": 0
+      },
+      "fact_verification": {
+        "task_count": 1,
+        "pass_count": 0,
+        "mixed_count": 1,
+        "fail_count": 0
+      },
+      "multi_source_synthesis": {
+        "task_count": 1,
+        "pass_count": 0,
+        "mixed_count": 1,
+        "fail_count": 0
+      },
+      "price_validation": {
+        "task_count": 2,
+        "pass_count": 1,
+        "mixed_count": 1,
+        "fail_count": 0
+      },
+      "messy_extraction": {
+        "task_count": 2,
+        "pass_count": 1,
+        "mixed_count": 1,
+        "fail_count": 0
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "stripe_founders",
+      "kind": "answer",
+      "category": "grounded_search",
+      "strategy": "direct",
+      "question": "Who founded Stripe?",
+      "url": null,
+      "latency_ms": 11723,
+      "notes": "Stable direct-lookup question with multiple reputable sources.",
+      "observed_summary": "Collected 4 evidence item(s) using direct_lookup. Top source: Stripe, Inc. - Wikipedia. [ 7 ] History [ edit ] Irish entrepreneur brothers John and Patrick Collison founded Stripe in Palo Alto, California , in 2010, [ 8 ] and serve as the company's president [ 9 ] and CEO, [ 10 ] respectively.",
+      "top_source_urls": [
+        "https://en.wikipedia.org/wiki/Stripe,_Inc.",
+        "https://kitrum.com/blog/stripe-founders-the-story-of-collison-brothers/",
+        "https://en.wikipedia.org/wiki/Patrick_Collison",
+        "https://europeanbusinessmagazine.com/business/the-stripe-revolution-the-two-irish-brothers-who-quietly-took-a-cut-of-the-entire-internet/"
+      ],
+      "checks": {
+        "must_include_any": true,
+        "source_hint_hits": 0,
+        "source_hints_present": false,
+        "min_evidence": true,
+        "automatic_score": 0.67,
+        "automatic_status": "mixed",
+        "evidence_count": 4
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "answer",
+        "request": {
+          "question": "Who founded Stripe?",
+          "strategy": "direct_lookup"
+        },
+        "result": {
+          "summary": "Collected 4 evidence item(s) using direct_lookup. Top source: Stripe, Inc. - Wikipedia. [ 7 ] History [ edit ] Irish entrepreneur brothers John and Patrick Collison founded Stripe in Palo Alto, California , in 2010, [ 8 ] and serve as the company's president [ 9 ] and CEO, [ 10 ] respectively.",
+          "strategy_label": "Direct Lookup",
+          "evidence_count": 4,
+          "documents_considered": 5
+        },
+        "sources": [
+          {
+            "rank": 1,
+            "title": "Stripe, Inc. - Wikipedia",
+            "url": "https://en.wikipedia.org/wiki/Stripe,_Inc.",
+            "quote": "[ 7 ]\nHistory\n[ edit ]\nIrish entrepreneur brothers John and Patrick Collison founded Stripe in Palo Alto, California , in 2010, [ 8 ] and serve as the company's president [ 9 ] and CEO, [ 10 ] respectively.",
+            "summary": "Stripe, Inc. - Wikipedia From Wikipedia, the free encyclopedia\nIrish-American multinational financial services and SaaS company\nFor other uses, see Stripe .",
+            "score": 3.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "duckduckgo",
+              "search_snippet": "Stripe, Inc. is an Irish-American [3] multinational financial services and software as a service (SaaS) company dual-headquartered in South San Francisco, California, United States, and Dublin, Ireland. [4][5] The company primarily offers payment-processing software and application programming interfaces for e-commerce websites and mobile applications. [6] Stripe is the largest privately owned ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:50:53.500732+00:00"
+          },
+          {
+            "rank": 2,
+            "title": "Stripe's Founders: The Story of Collison Brothers - KITRUM",
+            "url": "https://kitrum.com/blog/stripe-founders-the-story-of-collison-brothers/",
+            "quote": "Stripe's Founders: The Story of Collison Brothers - KITRUM ↲ Back to Blog\nStripe’s Founders: The Story of Collison Brothers Who Changed Online Payments Forever\nBlog\nPublished:\n24 Apr '25\nTime:\n9 min read\nCategories:\nInspiring Stories\nShare:",
+            "summary": "Stripe's Founders: The Story of Collison Brothers - KITRUM ↲ Back to Blog\nStripe’s Founders: The Story of Collison Brothers Who Changed Online Payments Forever\nBlog\nPublished:\n24 Apr '25\nTime:\n9 min read\nCategories:\nInspiring Stories\nShare:\nWe bet you have paid with Stripe at lea",
+            "score": 3.0,
+            "published_at": "2025-04-24T21:37:00+00:00",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "duckduckgo",
+              "search_snippet": "In November 2022, the company laid off around 14% of its workforce, which affected over 1,100 employees. Yet, Stripe founder, Patrick Collison accepted the ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:50:53.500732+00:00"
+          },
+          {
+            "rank": 3,
+            "title": "Patrick Collison - Wikipedia",
+            "url": "https://en.wikipedia.org/wiki/Patrick_Collison",
+            "quote": "He is the chief executive officer of Stripe , which he co-founded with his younger brother, John , in 2010.",
+            "summary": "Patrick Collison - Wikipedia From Wikipedia, the free encyclopedia\nIrish entrepreneur (born 1988)\nPatrick Collison\nCollison in 2015\nBorn\n( 1988-09-09 ) 9 September 1988 (age 37)\nLimerick , Ireland\nEducation\nGaelscoil Aonach Urmhumhan\nCastletroy College\nMassachusetts Institute of",
+            "score": 3.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "startpage",
+              "search_snippet": "Patrick Collison (born 9 September 1988) is an Irish entrepreneur. He is the chief executive officer of Stripe, which he co-founded with his younger brother ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:50:53.500732+00:00"
+          },
+          {
+            "rank": 4,
+            "title": "Stripe Business Model: How Two Brothers Built a $159 Billion Payments Empire",
+            "url": "https://europeanbusinessmagazine.com/business/the-stripe-revolution-the-two-irish-brothers-who-quietly-took-a-cut-of-the-entire-internet/",
+            "quote": "Stripe Business Model: How Two Brothers Built a $159 Billion Payments Empire Home Business The Stripe Revolution -The Two Irish Brothers Who Quietly Took a Cut...",
+            "summary": "Stripe Business Model: How Two Brothers Built a $159 Billion Payments Empire Home Business The Stripe Revolution -The Two Irish Brothers Who Quietly Took a Cut... Quick Answer: Stripe earns revenue by charging a small percentage fee on every transaction processed through its plat",
+            "score": 2.0,
+            "published_at": "2026-03-28T13:10:36+00:00",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "duckduckgo",
+              "search_snippet": "Stripe owns that layer for a significant portion of the internet. At $1.9 trillion in annual volume, growing at 34% year-on-year, with stablecoin infrastructure and AI commerce partnerships already in place, the company that two brothers built from a frustration with checkout forms is quietly positioned at the centre of how money will move for ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:50:53.500732+00:00"
+          }
+        ],
+        "trace": {
+          "summary": {
+            "query_count": 1,
+            "pages_fetched": 5,
+            "pages_extracted": 5,
+            "failure_count": 0
+          },
+          "queries": [
+            {
+              "query": "Who founded Stripe?",
+              "result_count": 5,
+              "urls": [
+                "https://en.wikipedia.org/wiki/Stripe,_Inc.",
+                "https://kitrum.com/blog/stripe-founders-the-story-of-collison-brothers/",
+                "https://en.wikipedia.org/wiki/Patrick_Collison",
+                "https://europeanbusinessmagazine.com/business/the-stripe-revolution-the-two-irish-brothers-who-quietly-took-a-cut-of-the-entire-internet/",
+                "https://www.forbes.com/profile/patrick-collison/"
+              ]
+            }
+          ],
+          "failures": []
+        },
+        "metadata": {
+          "documents_considered": 5
+        }
+      }
+    },
+    {
+      "id": "microsoft_ceo",
+      "kind": "answer",
+      "category": "latest_info",
+      "strategy": "latest",
+      "question": "Who is the current CEO of Microsoft?",
+      "url": null,
+      "latency_ms": 12312,
+      "notes": "Freshness-sensitive leadership lookup.",
+      "observed_summary": "Collected 3 evidence item(s) using latest_info. Top source: Satya Nadella - Chairman and CEO at Microsoft | LinkedIn. The real question is how to empower… 7,319 523 Comments My annual letter: Thinking in decades, executing in quarters Oct 21, 2025 Below is my annual letter, published today in our Annual Report 2025: Dear shareholders, colleagues, customers",
+      "top_source_urls": [
+        "https://www.linkedin.com/in/satyanadella",
+        "https://news.microsoft.com/source/exec/satya-nadella/",
+        "https://www.forbes.com/profile/satya-nadella/"
+      ],
+      "checks": {
+        "must_include_any": true,
+        "source_hint_hits": 1,
+        "source_hints_present": true,
+        "min_evidence": true,
+        "automatic_score": 1.0,
+        "automatic_status": "pass",
+        "evidence_count": 3
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "answer",
+        "request": {
+          "question": "Who is the current CEO of Microsoft?",
+          "strategy": "latest_info"
+        },
+        "result": {
+          "summary": "Collected 3 evidence item(s) using latest_info. Top source: Satya Nadella - Chairman and CEO at Microsoft | LinkedIn. The real question is how to empower… 7,319 523 Comments My annual letter: Thinking in decades, executing in quarters Oct 21, 2025 Below is my annual letter, published today in our Annual Report 2025: Dear shareholders, colleagues, customers",
+          "strategy_label": "Latest Info",
+          "evidence_count": 3,
+          "documents_considered": 5
+        },
+        "sources": [
+          {
+            "rank": 1,
+            "title": "Satya Nadella - Chairman and CEO at Microsoft | LinkedIn",
+            "url": "https://www.linkedin.com/in/satyanadella",
+            "quote": "The real question is how to empower…\n7,319\n523 Comments\nMy annual letter: Thinking in decades, executing in quarters\nOct 21, 2025\nBelow is my annual letter, published today in our Annual Report 2025: Dear shareholders, colleagues, customers",
+            "summary": "Satya Nadella - Chairman and CEO at Microsoft | LinkedIn Sign in to view Satya’s full profile\nSatya can introduce you to 10+ people at Microsoft\nor\nNew to LinkedIn? Join now\nBy clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement , Privacy Policy , and Coo",
+            "score": 6.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "Chairman and CEO at Microsoft · As chairman and CEO of Microsoft, I define my mission and that of my company as empowering every person and every organization on the planet to achieve more ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:05.813539+00:00"
+          },
+          {
+            "rank": 2,
+            "title": "Satya Nadella - Source",
+            "url": "https://news.microsoft.com/source/exec/satya-nadella/",
+            "quote": "Satya Nadella - Source Back to leadership page\nSatya Nadella\nChairman and Chief Executive Officer\nSatya Nadella is Chairman and Chief Executive Officer of Microsoft.",
+            "summary": "Satya Nadella - Source Back to leadership page\nSatya Nadella\nChairman and Chief Executive Officer\nSatya Nadella is Chairman and Chief Executive Officer of Microsoft. Before being named CEO in February 2014, Nadella held leadership roles in both enterprise and consumer businesses",
+            "score": 6.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "Satya Nadella is Chairman and Chief Executive Officer of Microsoft. Before being named CEO in February 2014, Nadella held leadership roles in both enterprise ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:05.813539+00:00"
+          },
+          {
+            "rank": 3,
+            "title": "Satya Nadella",
+            "url": "https://www.forbes.com/profile/satya-nadella/",
+            "quote": "Satya Nadella Feb 26, 2026\nLens 1: Is Your Org Chart Ready For AI?",
+            "summary": "Satya Nadella Feb 26, 2026\nLens 1: Is Your Org Chart Ready For AI? Three Ways To Drive Adoption\nAI doesn't fail organizations — misaligned structures do.",
+            "score": 2.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [
+                "metadata",
+                "json_ld"
+              ],
+              "dynamic_signals": [
+                "xhr_usage",
+                "script_heavy"
+              ],
+              "recovery_attempts": [
+                {
+                  "kind": "metadata",
+                  "status": "recovered"
+                },
+                {
+                  "kind": "json_ld",
+                  "status": "recovered"
+                },
+                {
+                  "kind": "hydration",
+                  "status": "not_found"
+                },
+                {
+                  "kind": "api_json",
+                  "status": "not_found"
+                }
+              ],
+              "recovery_failed": false,
+              "text": "description: Satya Nadella is #2858 on Forbes' 2026 Billionaires list. Read more about Satya Nadella, their experience, their asset summary, and more here.\nkeywords: Satya Nadella\ntitle: Satya Nadella\n\nname: Satya Nadella\njobTitle: CEO\nsameAs: https://www.twitter.com/satyanadella\nnetWorth value: 1312698000\nnetWorth currency: USD",
+              "source": "startpage",
+              "search_snippet": "Satya Nadella joined Microsoft in 1992 and rose to CEO in 2014, when his billionaire predecessor, Steve Ballmer, retired that year. Nadella was named chairman in 2021, replacing veteran tech exec ...",
+              "extraction_method": "hybrid"
+            },
+            "accessed_at": "2026-04-16T10:51:05.813539+00:00"
+          }
+        ],
+        "trace": {
+          "summary": {
+            "query_count": 4,
+            "pages_fetched": 5,
+            "pages_extracted": 5,
+            "failure_count": 0
+          },
+          "queries": [
+            {
+              "query": "Who is the current CEO of Microsoft?",
+              "result_count": 3,
+              "urls": [
+                "https://www.linkedin.com/in/satyanadella",
+                "https://www.forbes.com/profile/satya-nadella/",
+                "https://www.reddit.com/r/microsoft/comments/1mrx151/microsoft_ceo_satya_nadella_bill_gates_vision_has/"
+              ]
+            },
+            {
+              "query": "Who is the current CEO of Microsoft? latest",
+              "result_count": 4,
+              "urls": [
+                "https://www.linkedin.com/in/satyanadella",
+                "https://news.microsoft.com/source/exec/satya-nadella/",
+                "https://www.reddit.com/r/microsoft/comments/1nvc21u/satya_nadella_appoints_a_new_ceo_to_run/",
+                "https://www.forbes.com/profile/satya-nadella/"
+              ]
+            },
+            {
+              "query": "Who is the current CEO of Microsoft? official",
+              "result_count": 3,
+              "urls": [
+                "https://news.microsoft.com/source/exec/satya-nadella/",
+                "https://www.forbes.com/profile/satya-nadella/",
+                "https://www.linkedin.com/in/satyanadella"
+              ]
+            },
+            {
+              "query": "Who is the current CEO of Microsoft? today",
+              "result_count": 3,
+              "urls": [
+                "https://www.linkedin.com/in/satyanadella",
+                "https://www.forbes.com/profile/satya-nadella/",
+                "https://news.microsoft.com/source/exec/satya-nadella/"
+              ]
+            }
+          ],
+          "failures": []
+        },
+        "metadata": {
+          "documents_considered": 5
+        }
+      }
+    },
+    {
+      "id": "acetaminophen_anti_inflammatory",
+      "kind": "answer",
+      "category": "fact_verification",
+      "strategy": "verify",
+      "question": "Is acetaminophen anti-inflammatory?",
+      "url": null,
+      "latency_ms": 6744,
+      "notes": "Simple medical fact-check that should surface clear supporting evidence.",
+      "observed_summary": "Collected 4 evidence item(s) using verify_claim. Top source: Analgesic Effect of Acetaminophen: A Review of Known and Novel Mechanisms of Action - PMC (2020-11-30T00:00:00). PMC Copyright notice PMCID: PMC7734311 PMID: 33328986 Abstract Acetaminophen is one of the most commonly used analgesic agents for treating acute and chronic pain.",
+      "top_source_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7734311/",
+        "https://www.yalemedicine.org/news/acetaminophen-nsaids-over-the-counter-pain-relievers",
+        "https://www.tylenol.com/safety-dosing/what-is-acetaminophen",
+        "https://blog.walgreens.com/health/pain-management/acetaminophen-vs-aspirin-vs-ibuprofen.html"
+      ],
+      "checks": {
+        "must_include_any": true,
+        "source_hint_hits": 0,
+        "source_hints_present": false,
+        "min_evidence": true,
+        "automatic_score": 0.67,
+        "automatic_status": "mixed",
+        "evidence_count": 4
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "answer",
+        "request": {
+          "question": "Is acetaminophen anti-inflammatory?",
+          "strategy": "verify_claim"
+        },
+        "result": {
+          "summary": "Collected 4 evidence item(s) using verify_claim. Top source: Analgesic Effect of Acetaminophen: A Review of Known and Novel Mechanisms of Action - PMC (2020-11-30T00:00:00). PMC Copyright notice PMCID: PMC7734311 PMID: 33328986 Abstract Acetaminophen is one of the most commonly used analgesic agents for treating acute and chronic pain.",
+          "strategy_label": "Verify Claim",
+          "evidence_count": 4,
+          "documents_considered": 4
+        },
+        "sources": [
+          {
+            "rank": 1,
+            "title": "Analgesic Effect of Acetaminophen: A Review of Known and Novel Mechanisms of Action - PMC",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7734311/",
+            "quote": "PMC Copyright notice\nPMCID: PMC7734311 PMID: 33328986\nAbstract\nAcetaminophen is one of the most commonly used analgesic agents for treating acute and chronic pain.",
+            "summary": "Analgesic Effect of Acetaminophen: A Review of Known and Novel Mechanisms of Action - PMC . 2020 Nov 30;11:580289.",
+            "score": 6.0,
+            "published_at": "2020-11-30T00:00:00",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "Acetaminophen does not possess any anti-inflammatory activity, because it is a very weak inhibitor of COX and does not inhibit neutrophil activation (Hanel and Lands, 1982).",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:12.558314+00:00"
+          },
+          {
+            "rank": 2,
+            "title": "NSAIDs vs. Acetaminophen: Which Over-the-Counter Medicine Should I Use? | News | Yale Medicine",
+            "url": "https://www.yalemedicine.org/news/acetaminophen-nsaids-over-the-counter-pain-relievers",
+            "quote": "Most OTC medications fall into one of two categories: nonsteroidal anti-inflammatory drugs (NSAIDs) and acetaminophen, and there are different subtypes and brands (and generic options) within each of these categories.",
+            "summary": "NSAIDs vs. Acetaminophen: Which Over-the-Counter Medicine Should I Use?",
+            "score": 4.0,
+            "published_at": "2023-03-17T00:00:00",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "What are Nonsteroidal Anti-Inflammatory Drugs (NSAIDs)? These medicines, which include aspirin, ibuprofen, and naproxen, among others, relieve pain and reduce fever. They also treat inflammation and related symptoms, including swelling from arthritis, as well as sprains and strains.",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:12.558314+00:00"
+          },
+          {
+            "rank": 3,
+            "title": "Acetaminophen Explained: Uses, Dosage & Safety | TYLENOL®",
+            "url": "https://www.tylenol.com/safety-dosing/what-is-acetaminophen",
+            "quote": "Acetaminophen is an important pain relief option for people:\nWith a history of stomach problems\nOn aspirin heart therapy\nWith kidney disease\n60 years and older\nIs acetaminophen an NSAID (nonsteroidal anti-inflammatory drug)?",
+            "summary": "Acetaminophen Explained: Uses, Dosage & Safety | TYLENOL® What is Acetaminophen? Acetaminophen (pronounced a SEET a MIN oh fen) is the primary active ingredient in TYLENOL ® products, and is one of the most common active drug ingredients in the U.S.",
+            "score": 4.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "Is acetaminophen an NSAID (nonsteroidal anti-inflammatory drug)? Acetaminophen is not an NSAID (nonsteroidal anti-inflammatory drug), the other main type of pain reliever. Ibuprofen, Aspirin, and Naproxen sodium are NSAIDs and different than Acetaminophen.",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:12.558314+00:00"
+          },
+          {
+            "rank": 4,
+            "title": "Acetaminophen vs. aspirin vs. ibuprofen",
+            "url": "https://blog.walgreens.com/health/pain-management/acetaminophen-vs-aspirin-vs-ibuprofen.html",
+            "quote": "Acetaminophen vs.",
+            "summary": "Acetaminophen vs. aspirin vs.",
+            "score": 1.0,
+            "published_at": "2024-04-29T00:00:00",
+            "metadata": {
+              "structured_sources": [
+                "metadata"
+              ],
+              "dynamic_signals": [
+                "script_heavy"
+              ],
+              "recovery_attempts": [
+                {
+                  "kind": "metadata",
+                  "status": "recovered"
+                },
+                {
+                  "kind": "json_ld",
+                  "status": "not_found"
+                },
+                {
+                  "kind": "hydration",
+                  "status": "not_found"
+                },
+                {
+                  "kind": "api_json",
+                  "status": "not_found"
+                }
+              ],
+              "recovery_failed": false,
+              "text": "keywords: Pain Management\ndescription: There are many different pain relievers available and there are differences and similarities. Learn about acetaminophen vs aspirin vs ibuprofen at Walgreens.",
+              "source": "google",
+              "search_snippet": "29 באפר׳ 2024 · No, acetaminophen is not an anti-inflammatory. Some other pain relievers are classified as nonsteroidal anti-inflammatory drugs, or NSAIDs. As ...",
+              "extraction_method": "metadata"
+            },
+            "accessed_at": "2026-04-16T10:51:12.558314+00:00"
+          }
+        ],
+        "trace": {
+          "summary": {
+            "query_count": 1,
+            "pages_fetched": 4,
+            "pages_extracted": 4,
+            "failure_count": 1
+          },
+          "queries": [
+            {
+              "query": "Is acetaminophen anti-inflammatory?",
+              "result_count": 5,
+              "urls": [
+                "https://www.yalemedicine.org/news/acetaminophen-nsaids-over-the-counter-pain-relievers",
+                "https://pmc.ncbi.nlm.nih.gov/articles/PMC7734311/",
+                "https://www.tylenol.com/safety-dosing/what-is-acetaminophen",
+                "https://www.drugs.com/medical-answers/tylenol-anti-inflammatory-drug-3002130/",
+                "https://blog.walgreens.com/health/pain-management/acetaminophen-vs-aspirin-vs-ibuprofen.html"
+              ]
+            }
+          ],
+          "failures": [
+            {
+              "url": "https://www.drugs.com/medical-answers/tylenol-anti-inflammatory-drug-3002130/",
+              "error": "HTTP Error 403: Forbidden"
+            }
+          ]
+        },
+        "metadata": {
+          "documents_considered": 4
+        }
+      }
+    },
+    {
+      "id": "openai_vs_anthropic_pricing",
+      "kind": "answer",
+      "category": "multi_source_synthesis",
+      "strategy": "compare",
+      "question": "OpenAI vs Anthropic pricing",
+      "url": null,
+      "latency_ms": 10546,
+      "notes": "Comparison query that should ideally reach both vendor pricing pages.",
+      "observed_summary": "Collected 5 evidence item(s) using compare_entities. Top source: OpenAI vs Anthropic Cost Comparison 2025: Which LLM is Cheaper? - CostLens.dev | CostLens.dev (2026-04-16T10:51:17.694Z). Current Pricing (January 2025) OpenAI Pricing Model Input (per 1M tokens) Output (per 1M tokens) Best For GPT-4 Turbo $10.00 $30.00 Complex reasoning, code GPT-4 $60.00 Highest quality tasks GPT-3.5 Turbo $0.50 $1.50 Simple tasks, high volu",
+      "top_source_urls": [
+        "https://costlens.dev/blog/openai-vs-anthropic-cost-comparison",
+        "https://www.finout.io/blog/openai-vs-anthropic-api-pricing-comparison",
+        "https://www.vantage.sh/blog/anthropic-vs-openai-api-costs",
+        "https://www.datastudios.org/post/openai-vs-anthropic-2026-comparison-products-pricing-and-company-positioning",
+        "https://www.solvimon.com/pricing-guides/openai-versus-anthropic"
+      ],
+      "checks": {
+        "must_include_all": true,
+        "source_hint_hits": 0,
+        "source_hints_present": false,
+        "min_evidence": true,
+        "automatic_score": 0.67,
+        "automatic_status": "mixed",
+        "evidence_count": 5
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "answer",
+        "request": {
+          "question": "OpenAI vs Anthropic pricing",
+          "strategy": "compare_entities"
+        },
+        "result": {
+          "summary": "Collected 5 evidence item(s) using compare_entities. Top source: OpenAI vs Anthropic Cost Comparison 2025: Which LLM is Cheaper? - CostLens.dev | CostLens.dev (2026-04-16T10:51:17.694Z). Current Pricing (January 2025) OpenAI Pricing Model Input (per 1M tokens) Output (per 1M tokens) Best For GPT-4 Turbo $10.00 $30.00 Complex reasoning, code GPT-4 $60.00 Highest quality tasks GPT-3.5 Turbo $0.50 $1.50 Simple tasks, high volu",
+          "strategy_label": "Compare Entities",
+          "evidence_count": 5,
+          "documents_considered": 5
+        },
+        "sources": [
+          {
+            "rank": 1,
+            "title": "OpenAI vs Anthropic Cost Comparison 2025: Which LLM is Cheaper? - CostLens.dev | CostLens.dev",
+            "url": "https://costlens.dev/blog/openai-vs-anthropic-cost-comparison",
+            "quote": "Current Pricing (January 2025)\nOpenAI Pricing\nModel\nInput (per 1M tokens)\nOutput (per 1M tokens)\nBest For\nGPT-4 Turbo\n$10.00\n$30.00\nComplex reasoning, code\nGPT-4\n$60.00\nHighest quality tasks\nGPT-3.5 Turbo\n$0.50\n$1.50\nSimple tasks, high volu",
+            "summary": "OpenAI vs Anthropic Cost Comparison 2025: Which LLM is Cheaper? - CostLens.dev | CostLens.dev Choosing between OpenAI and Anthropic?",
+            "score": 4.75,
+            "published_at": "2026-04-16T10:51:17.694Z",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "דירוג 4.8(127) · בחינם · מפתחים3. Rate Limits · OpenAI: Stricter rate limits on free tier · Anthropic: More generous rate limits · Both charge for higher limits. Real Customer Savings. Case ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:23.104778+00:00"
+          },
+          {
+            "rank": 2,
+            "title": "OpenAI vs Anthropic API Pricing Comparison (2026): Which LLM Is Actually Cheaper?",
+            "url": "https://www.finout.io/blog/openai-vs-anthropic-api-pricing-comparison",
+            "quote": "OpenAI vs Anthropic API Pricing Comparison (2026): Which LLM Is Actually Cheaper?",
+            "summary": "OpenAI vs Anthropic API Pricing Comparison (2026): Which LLM Is Actually Cheaper? Blog posts\nOpenAI vs Anthropic API Pricing Comparison (2026): Which LLM Is Actually Cheaper?",
+            "score": 4.5,
+            "published_at": "2026-03-17T00:00:00",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "17 במרץ 2026 · Quick answer: At standard rates, OpenAI is cheaper across every comparable tier in 2026 — and uniquely offers ultra-budget Nano models ($0.10– ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:23.104778+00:00"
+          },
+          {
+            "rank": 3,
+            "title": "Anthropic vs OpenAI: Comparing Direct API Costs | Vantage",
+            "url": "https://www.vantage.sh/blog/anthropic-vs-openai-api-costs",
+            "quote": "Anthropic vs OpenAI: Comparing Direct API Costs | Vantage Anthropic and OpenAI have been in a quiet price war for the better part of a year now.",
+            "summary": "Anthropic vs OpenAI: Comparing Direct API Costs | Vantage Anthropic and OpenAI have been in a quiet price war for the better part of a year now. Anthropic slashed Opus pricing by 67% with the 4.6 release.",
+            "score": 4.25,
+            "published_at": "2026-03-11T00:00:00.000Z",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "11 במרץ 2026 · Neither provider is strictly cheaper. OpenAI has more options at the low end, Anthropic is competitive at the flagship tier, and both have been ...Anthropic's Current Pricing · OpenAI's Current Pricing",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:23.104778+00:00"
+          },
+          {
+            "rank": 4,
+            "title": "OpenAI vs Anthropic: 2026 Comparison, Products, Pricing, and Company Positioning",
+            "url": "https://www.datastudios.org/post/openai-vs-anthropic-2026-comparison-products-pricing-and-company-positioning",
+            "quote": "OpenAI vs Anthropic: 2026 Comparison, Products, Pricing, and Company Positioning OpenAI and Anthropic operate in the same frontier AI market, though they are not built around the same public structure, the same product ladder, or the same c",
+            "summary": "OpenAI vs Anthropic: 2026 Comparison, Products, Pricing, and Company Positioning OpenAI and Anthropic operate in the same frontier AI market, though they are not built around the same public structure, the same product ladder, or the same company identity. Both companies develop",
+            "score": 4.25,
+            "published_at": "2026-03-09T19:28:31.006Z",
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "OpenAI and Anthropic operate in the same frontier AI market, though they are not built around the same public structure, the same product ladder, or the same company identity.Both companies develop advanced models, run consumer-facing assistants, sell API access to developers, and offer work-oriented tiers for teams and larger organizations.The overlap is substantial.The shape of the two ...",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:23.104778+00:00"
+          },
+          {
+            "rank": 5,
+            "title": "OpenAI versus Anthropic - a comparison for AI product builders - Solvimon | All-in-one billing and monetization platform",
+            "url": "https://www.solvimon.com/pricing-guides/openai-versus-anthropic",
+            "quote": "OpenAI versus Anthropic - a comparison for AI product builders - Solvimon | All-in-one billing and monetization platform OpenAI vs Google Gemini pricing - a comparison for AI product builders\nOpenAI vs DeepSeek - a comparison for AI product",
+            "summary": "OpenAI versus Anthropic - a comparison for AI product builders - Solvimon | All-in-one billing and monetization platform OpenAI vs Google Gemini pricing - a comparison for AI product builders\nOpenAI vs DeepSeek - a comparison for AI product builders\nOpenAI vs. Mistral\nOpenAI vs.",
+            "score": 4.0,
+            "published_at": null,
+            "metadata": {
+              "structured_sources": [],
+              "dynamic_signals": [],
+              "recovery_attempts": [],
+              "recovery_failed": false,
+              "source": "google",
+              "search_snippet": "Pricing Comparison: OpenAI versus Anthropic - a comparison for AI product builders OpenAI and Anthropic now each offer multiple model generations, subscription plans, and API pricing tiers. For developers integrating these models, understanding the cost implications is essential.",
+              "extraction_method": "fallback"
+            },
+            "accessed_at": "2026-04-16T10:51:23.104778+00:00"
+          }
+        ],
+        "trace": {
+          "summary": {
+            "query_count": 1,
+            "pages_fetched": 5,
+            "pages_extracted": 5,
+            "failure_count": 0
+          },
+          "queries": [
+            {
+              "query": "OpenAI vs Anthropic pricing",
+              "result_count": 5,
+              "urls": [
+                "https://www.solvimon.com/pricing-guides/openai-versus-anthropic",
+                "https://costlens.dev/blog/openai-vs-anthropic-cost-comparison",
+                "https://www.vantage.sh/blog/anthropic-vs-openai-api-costs",
+                "https://www.datastudios.org/post/openai-vs-anthropic-2026-comparison-products-pricing-and-company-positioning",
+                "https://www.finout.io/blog/openai-vs-anthropic-api-pricing-comparison"
+              ]
+            }
+          ],
+          "failures": []
+        },
+        "metadata": {
+          "documents_considered": 5
+        }
+      }
+    },
+    {
+      "id": "chatgpt_team_pricing",
+      "kind": "price",
+      "category": "price_validation",
+      "strategy": "price",
+      "question": "ChatGPT Team pricing",
+      "url": null,
+      "latency_ms": 9121,
+      "notes": "SaaS pricing example where the current heuristic often finds partial but not fully supported consensus.",
+      "observed_summary": "Consensus price: USD 25.00 based on 2 independent source(s).",
+      "top_source_urls": [
+        "https://help.openai.com/en/articles/8792828-what-is-chatgpt-team",
+        "https://team-gpt.com/blog/chatgpt-pricing"
+      ],
+      "checks": {
+        "must_include_any": false,
+        "source_hint_hits": 1,
+        "source_hints_present": true,
+        "expected_verdict": true,
+        "min_evidence": true,
+        "automatic_score": 0.75,
+        "automatic_status": "mixed",
+        "evidence_count": 2,
+        "observed_verdict": "insufficient"
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "price_consensus",
+        "request": {
+          "question": "ChatGPT Team pricing",
+          "min_sources": 3
+        },
+        "result": {
+          "verdict": "insufficient",
+          "summary": "Consensus price: USD 25.00 based on 2 independent source(s).",
+          "confidence": 0.2,
+          "consensus": {
+            "amount": 25.0,
+            "currency": "USD"
+          },
+          "agreeing_source_count": 2,
+          "conflicting_source_count": 0
+        },
+        "agreeing_sources": [
+          {
+            "rank": 1,
+            "title": "What is ChatGPT Business? | OpenAI Help Center",
+            "url": "https://help.openai.com/en/articles/8792828-what-is-chatgpt-team",
+            "domain": "help.openai.com",
+            "price": {
+              "amount": 25.0,
+              "currency": "USD"
+            },
+            "snippet": "pricing (USD) is $25 per user per month if billed monthly and $20 per user per month if billed annually",
+            "score": 9.4,
+            "published_at": null
+          },
+          {
+            "rank": 2,
+            "title": "ChatGPT Pricing: Is it Good Value for Money [2026] | Juma (Team-GPT)",
+            "url": "https://team-gpt.com/blog/chatgpt-pricing",
+            "domain": "team-gpt.com",
+            "price": {
+              "amount": 25.0,
+              "currency": "USD"
+            },
+            "snippet": "Team: Starts from $25/month/seat when billed annually",
+            "score": 9.0,
+            "published_at": null
+          }
+        ],
+        "conflicting_sources": [],
+        "trace": {
+          "summary": {
+            "query_count": 1,
+            "pages_fetched": 5,
+            "pages_extracted": 5,
+            "failure_count": 0
+          },
+          "queries": [
+            {
+              "query": "ChatGPT Team pricing",
+              "result_count": 5,
+              "urls": [
+                "https://chatgpt.com/pricing/",
+                "https://openai.com/business/chatgpt-pricing/",
+                "https://help.openai.com/en/articles/8792828-what-is-chatgpt-team",
+                "https://team-gpt.com/blog/chatgpt-pricing",
+                "https://chatgpt.com/business/business-plan/"
+              ]
+            }
+          ],
+          "failures": []
+        },
+        "metadata": {
+          "sources_considered": 5,
+          "price_mentions": 2
+        }
+      }
+    },
+    {
+      "id": "notion_ai_pricing",
+      "kind": "price",
+      "category": "price_validation",
+      "strategy": "price",
+      "question": "Notion AI pricing",
+      "url": null,
+      "latency_ms": 4190,
+      "notes": "Checks that Viseer avoids overstating confidence when pricing signals are messy.",
+      "observed_summary": "Consensus price: USD 10.00 based on 2 independent source(s).",
+      "top_source_urls": [
+        "https://userjot.com/blog/notion-pricing-2025-plans-ai-costs-explained",
+        "https://www.notion.com/pricing"
+      ],
+      "checks": {
+        "must_include_any": true,
+        "source_hint_hits": 1,
+        "source_hints_present": true,
+        "expected_verdict": true,
+        "min_evidence": true,
+        "automatic_score": 1.0,
+        "automatic_status": "pass",
+        "evidence_count": 2,
+        "observed_verdict": "insufficient"
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "price_consensus",
+        "request": {
+          "question": "Notion AI pricing",
+          "min_sources": 3
+        },
+        "result": {
+          "verdict": "insufficient",
+          "summary": "Consensus price: USD 10.00 based on 2 independent source(s).",
+          "confidence": 0.2,
+          "consensus": {
+            "amount": 10.0,
+            "currency": "USD"
+          },
+          "agreeing_source_count": 2,
+          "conflicting_source_count": 0
+        },
+        "agreeing_sources": [
+          {
+            "rank": 1,
+            "title": "Notion Pricing 2026: Plans, AI Features & Real Costs Breakdown - UserJot",
+            "url": "https://userjot.com/blog/notion-pricing-2025-plans-ai-costs-explained",
+            "domain": "userjot.com",
+            "price": {
+              "amount": 10.0,
+              "currency": "USD"
+            },
+            "snippet": "No more calculating “$10 per user plus $8 for AI” - it’s all integrated into one price",
+            "score": 9.8,
+            "published_at": "2025-07-17T14:00:00.000Z"
+          },
+          {
+            "rank": 2,
+            "title": "Notion Pricing Plans: Free, Plus, Business, & Enterprise.",
+            "url": "https://www.notion.com/pricing",
+            "domain": "www.notion.com",
+            "price": {
+              "amount": 10.0,
+              "currency": "USD"
+            },
+            "snippet": "then $10 per 1,000 credits",
+            "score": 2.4,
+            "published_at": null
+          }
+        ],
+        "conflicting_sources": [],
+        "trace": {
+          "summary": {
+            "query_count": 1,
+            "pages_fetched": 4,
+            "pages_extracted": 4,
+            "failure_count": 0
+          },
+          "queries": [
+            {
+              "query": "Notion AI pricing",
+              "result_count": 4,
+              "urls": [
+                "https://www.notion.com/pricing",
+                "https://userjot.com/blog/notion-pricing-2025-plans-ai-costs-explained",
+                "https://www.notion.com/product/ai",
+                "https://www.notion.com/"
+              ]
+            }
+          ],
+          "failures": []
+        },
+        "metadata": {
+          "sources_considered": 4,
+          "price_mentions": 2
+        }
+      }
+    },
+    {
+      "id": "saleor_storefront_fetch",
+      "kind": "fetch",
+      "category": "messy_extraction",
+      "strategy": null,
+      "question": null,
+      "url": "https://demo.saleor.io/default-channel",
+      "latency_ms": 1356,
+      "notes": "Client-heavy storefront page used to test no-browser extraction quality.",
+      "observed_summary": "ACME Storefront, powered by Saleor & Next.js | Saleor Store",
+      "top_source_urls": [
+        "https://demo.saleor.io/default-channel"
+      ],
+      "checks": {
+        "must_include_any": true,
+        "min_chars": false,
+        "automatic_score": 0.5,
+        "automatic_status": "mixed",
+        "evidence_count": 1,
+        "observed_char_count": 229
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "page_document",
+        "request": {
+          "url": "https://demo.saleor.io/default-channel",
+          "max_chars": null
+        },
+        "result": {
+          "title": "ACME Storefront, powered by Saleor & Next.js | Saleor Store",
+          "url": "https://demo.saleor.io/default-channel",
+          "published_at": null,
+          "fetched_at": "2026-04-16T10:51:37.774129+00:00",
+          "extraction_method": "metadata",
+          "word_count": 31,
+          "char_count": 229,
+          "text": "description: Storefront Next.js Example for building performant e-commerce experiences with Saleor - the composable, headless commerce platform for global brands.\ntitle: ACME Storefront, powered by Saleor & Next.js | Saleor Store",
+          "text_truncated": false
+        },
+        "metadata": {
+          "structured_sources": [
+            "metadata"
+          ],
+          "dynamic_signals": [
+            "script_heavy"
+          ],
+          "recovery_attempts": [
+            {
+              "kind": "metadata",
+              "status": "recovered"
+            },
+            {
+              "kind": "json_ld",
+              "status": "not_found"
+            },
+            {
+              "kind": "hydration",
+              "status": "not_found"
+            },
+            {
+              "kind": "api_json",
+              "status": "not_found"
+            }
+          ],
+          "recovery_failed": false,
+          "text": "description: Storefront Next.js Example for building performant e-commerce experiences with Saleor - the composable, headless commerce platform for global brands.\ntitle: ACME Storefront, powered by Saleor & Next.js | Saleor Store"
+        }
+      }
+    },
+    {
+      "id": "spree_storefront_fetch",
+      "kind": "fetch",
+      "category": "messy_extraction",
+      "strategy": null,
+      "question": null,
+      "url": "https://demo.spreecommerce.org/us/en",
+      "latency_ms": 2268,
+      "notes": "Second storefront target to keep the extraction bucket from depending on one site.",
+      "observed_summary": "Spree Commerce Demo | Next.js Ecommerce Storefront",
+      "top_source_urls": [
+        "https://demo.spreecommerce.org/us/en"
+      ],
+      "checks": {
+        "must_include_any": true,
+        "min_chars": true,
+        "automatic_score": 1.0,
+        "automatic_status": "pass",
+        "evidence_count": 1,
+        "observed_char_count": 504
+      },
+      "payload": {
+        "schema_version": "1.0",
+        "kind": "page_document",
+        "request": {
+          "url": "https://demo.spreecommerce.org/us/en",
+          "max_chars": null
+        },
+        "result": {
+          "title": "Spree Commerce Demo | Next.js Ecommerce Storefront",
+          "url": "https://demo.spreecommerce.org/us/en",
+          "published_at": null,
+          "fetched_at": "2026-04-16T10:51:40.042213+00:00",
+          "extraction_method": "hybrid",
+          "word_count": 60,
+          "char_count": 504,
+          "text": "description: Explore a live Next.js storefront powered by Spree Commerce open source. Browse products, add to cart, and check out, then build your own with the quickstart guide.\nkeywords: spree commerce demo, next.js ecommerce, open source ecommerce, headless commerce\ntitle: Spree Commerce Demo | Next.js Ecommerce Storefront\n\nname: Spree\nurl: https://demo.spreecommerce.org\nsameAs: https://twitter.com/spreecommerce\ncontactPoint email: hello@spreecommerce.org\ncontactPoint contactType: customer service",
+          "text_truncated": false
+        },
+        "metadata": {
+          "structured_sources": [
+            "metadata",
+            "json_ld"
+          ],
+          "dynamic_signals": [
+            "script_heavy"
+          ],
+          "recovery_attempts": [
+            {
+              "kind": "metadata",
+              "status": "recovered"
+            },
+            {
+              "kind": "json_ld",
+              "status": "recovered"
+            },
+            {
+              "kind": "hydration",
+              "status": "not_found"
+            },
+            {
+              "kind": "api_json",
+              "status": "not_found"
+            }
+          ],
+          "recovery_failed": false,
+          "text": "description: Explore a live Next.js storefront powered by Spree Commerce open source. Browse products, add to cart, and check out, then build your own with the quickstart guide.\nkeywords: spree commerce demo, next.js ecommerce, open source ecommerce, headless commerce\ntitle: Spree Commerce Demo | Next.js Ecommerce Storefront\n\nname: Spree\nurl: https://demo.spreecommerce.org\nsameAs: https://twitter.com/spreecommerce\ncontactPoint email: hello@spreecommerce.org\ncontactPoint contactType: customer service"
+        }
+      }
+    }
+  ]
+}

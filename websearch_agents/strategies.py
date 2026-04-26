@@ -31,7 +31,10 @@ class DirectLookupStrategy(SearchStrategy):
     name = "direct_lookup"
 
     def build_queries(self, question: str) -> list[str]:
-        return [question]
+        return [
+            question,
+            f"{question} official",
+        ]
 
 
 class LatestInfoStrategy(SearchStrategy):
@@ -103,6 +106,7 @@ class CompareEntitiesStrategy(SearchStrategy):
             question,
             f"{question} comparison",
             f"{question} official docs",
+            f"{question} official pricing",
         ]
 
     def should_stop(self, evidence_count: int) -> bool:
@@ -137,6 +141,30 @@ class PriceValidationStrategy(SearchStrategy):
         return evidence_count >= 4
 
 
+class CommunityDiscussionStrategy(SearchStrategy):
+    """
+    Use when the user wants first-person reports, public discussion, or Reddit-style community signal.
+    Examples:
+    - What do Reddit users think about Framework laptops?
+    - Search Reddit for experiences with product Y
+    Avoid when:
+    - official facts, regulated guidance, or exact prices are required
+    """
+
+    name = "community_discussion"
+    recency_weight = 0.25
+
+    def build_queries(self, question: str) -> list[str]:
+        return [
+            question,
+            f"{question} discussion",
+            f"{question} review",
+        ]
+
+    def should_stop(self, evidence_count: int) -> bool:
+        return evidence_count >= 5
+
+
 STRATEGY_ALIASES = {
     "direct": DirectLookupStrategy,
     "direct_lookup": DirectLookupStrategy,
@@ -148,6 +176,10 @@ STRATEGY_ALIASES = {
     "compare_entities": CompareEntitiesStrategy,
     "price": PriceValidationStrategy,
     "price_validation": PriceValidationStrategy,
+    "community": CommunityDiscussionStrategy,
+    "community_discussion": CommunityDiscussionStrategy,
+    "discussion": CommunityDiscussionStrategy,
+    "reddit": CommunityDiscussionStrategy,
 }
 
 

@@ -25,7 +25,7 @@ ranking, and citation output.
 
 ## What v1 includes
 
-- Provider interface plus SearXNG and mock providers
+- Provider interface plus SearXNG, Reddit, and mock providers
 - HTTP fetcher
 - `trafilatura` extractor with a built-in fallback extractor and structured-data recovery
 - Deterministic strategies for direct lookup, latest info, verification, comparisons, and pricing
@@ -181,6 +181,43 @@ viseer \
   --strategy direct \
   --searxng-url https://your-searxng.example.com
 ```
+
+Search Reddit directly:
+
+```bash
+viseer \
+  "Framework laptop long term experience" \
+  --provider reddit
+```
+
+Restrict Reddit search to a subreddit:
+
+```bash
+viseer \
+  "best debugging tools" \
+  --provider reddit \
+  --subreddit Python \
+  --reddit-sort top \
+  --reddit-time year
+```
+
+When `--provider reddit` is used, Viseer defaults to the `reddit` strategy,
+which is tuned for public discussion instead of official-source lookup. Reddit
+thread fetching uses Reddit JSON endpoints, so `viseer-fetch` can also extract
+post text and top comments from a known thread URL:
+
+```bash
+viseer-fetch "https://www.reddit.com/r/Python/comments/example/thread/"
+```
+
+Useful Reddit environment variables:
+
+- `SEARCH_PROVIDER=reddit`
+- `REDDIT_SUBREDDIT=Python`
+- `REDDIT_SORT=top`
+- `REDDIT_TIME=year`
+- `REDDIT_COMMENT_LIMIT=8`
+- `REDDIT_BEARER_TOKEN=...`
 
 Price validation example:
 
@@ -456,3 +493,31 @@ should be evals, richer recency handling, and optional browser fallback.
 ```bash
 python3 -m unittest discover -s tests
 ```
+
+## Benchmark
+
+Viseer now ships with a small benchmark set for trust-oriented checks:
+
+- grounded search
+- latest info
+- fact verification
+- multi-source synthesis
+- price validation
+- messy extraction pages
+
+Run it from the repo root after starting the bundled local SearXNG instance:
+
+```bash
+docker compose up -d
+
+python -m benchmarks.runner \
+  --tasks benchmarks/tasks.json \
+  --output benchmarks/results/local-run.json \
+  --markdown benchmarks/results/local-run.md
+```
+
+Published first run:
+
+- [Benchmark overview](benchmarks/README.md)
+- [Initial benchmark report](benchmarks/results/2026-04-16-initial.md)
+- [Initial benchmark JSON](benchmarks/results/2026-04-16-initial.json)

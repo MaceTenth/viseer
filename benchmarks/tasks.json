@@ -1,0 +1,93 @@
+[
+  {
+    "id": "stripe_founders",
+    "kind": "answer",
+    "category": "grounded_search",
+    "question": "Who founded Stripe?",
+    "strategy": "direct",
+    "must_include_any": ["Patrick Collison", "John Collison", "Collison"],
+    "expected_source_hints": ["stripe.com", "haas.berkeley.edu"],
+    "min_evidence": 2,
+    "notes": "Stable direct-lookup question with multiple reputable sources."
+  },
+  {
+    "id": "microsoft_ceo",
+    "kind": "answer",
+    "category": "latest_info",
+    "question": "Who is the current CEO of Microsoft?",
+    "strategy": "latest",
+    "must_include_any": ["Satya Nadella"],
+    "expected_source_hints": ["microsoft.com"],
+    "min_evidence": 2,
+    "notes": "Freshness-sensitive leadership lookup."
+  },
+  {
+    "id": "acetaminophen_anti_inflammatory",
+    "kind": "answer",
+    "category": "fact_verification",
+    "question": "Is acetaminophen anti-inflammatory?",
+    "strategy": "verify",
+    "must_include_any": [
+      "not anti-inflammatory",
+      "isn't anti-inflammatory",
+      "not an anti-inflammatory",
+      "NSAID"
+    ],
+    "expected_source_hints": ["mayoclinic.org", "medicalnewstoday.com", "nhs.uk"],
+    "min_evidence": 2,
+    "notes": "Simple medical fact-check that should surface clear supporting evidence."
+  },
+  {
+    "id": "openai_vs_anthropic_pricing",
+    "kind": "answer",
+    "category": "multi_source_synthesis",
+    "question": "OpenAI vs Anthropic pricing",
+    "strategy": "compare",
+    "must_include_all": ["OpenAI", "Anthropic"],
+    "expected_source_hints": ["openai.com", "anthropic.com"],
+    "min_evidence": 2,
+    "notes": "Comparison query that should ideally reach both vendor pricing pages."
+  },
+  {
+    "id": "chatgpt_team_pricing",
+    "kind": "price",
+    "category": "price_validation",
+    "question": "ChatGPT Team pricing",
+    "strategy": "price",
+    "expected_verdict": "insufficient",
+    "must_include_any": ["30.00", "$30", "30/user/month"],
+    "expected_source_hints": ["chatgpt.com", "openai.com", "cloudeagle.ai", "content-whale.com"],
+    "min_evidence": 1,
+    "notes": "SaaS pricing example where the current heuristic often finds partial but not fully supported consensus."
+  },
+  {
+    "id": "notion_ai_pricing",
+    "kind": "price",
+    "category": "price_validation",
+    "question": "Notion AI pricing",
+    "strategy": "price",
+    "expected_verdict": "insufficient",
+    "must_include_any": ["10.00", "$10"],
+    "expected_source_hints": ["notion.com", "get-alfred.ai", "costbench.com"],
+    "min_evidence": 1,
+    "notes": "Checks that Viseer avoids overstating confidence when pricing signals are messy."
+  },
+  {
+    "id": "saleor_storefront_fetch",
+    "kind": "fetch",
+    "category": "messy_extraction",
+    "url": "https://demo.saleor.io/default-channel",
+    "must_include_any": ["Minimal design, maximum impact", "Saleor", "Plimsolls"],
+    "min_chars": 500,
+    "notes": "Client-heavy storefront page used to test no-browser extraction quality."
+  },
+  {
+    "id": "spree_storefront_fetch",
+    "kind": "fetch",
+    "category": "messy_extraction",
+    "url": "https://demo.spreecommerce.org/us/en",
+    "must_include_any": ["Spree", "Shop All", "Categories", "Products"],
+    "min_chars": 400,
+    "notes": "Second storefront target to keep the extraction bucket from depending on one site."
+  }
+]

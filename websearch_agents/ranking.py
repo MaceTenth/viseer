@@ -15,11 +15,220 @@ PENALIZED_HOSTS = {
     "pinterest.com": -1.0,
 }
 
+SOCIAL_HOSTS = {
+    "linkedin.com",
+    "x.com",
+    "twitter.com",
+    "facebook.com",
+    "instagram.com",
+    "youtube.com",
+    "youtu.be",
+    "tiktok.com",
+    "threads.net",
+}
+
+COMMUNITY_HOSTS = {
+    "reddit.com",
+    "quora.com",
+    "stackoverflow.com",
+    "stackexchange.com",
+    "news.ycombinator.com",
+}
+
+MARKETPLACE_HOSTS = {
+    "amazon.com",
+    "ebay.com",
+    "etsy.com",
+    "aliexpress.com",
+    "mercari.com",
+}
+
+REFERENCE_HOSTS = {
+    "wikipedia.org",
+    "britannica.com",
+}
+
+GENERIC_HOST_LABELS = {
+    "www",
+    "m",
+    "amp",
+    "help",
+    "support",
+    "docs",
+    "developers",
+    "developer",
+    "platform",
+    "api",
+    "blog",
+    "news",
+    "app",
+    "web",
+}
+
+DOC_HINTS = ("docs", "developer", "developers", "api", "reference")
+HELP_HINTS = ("help", "support", "faq", "kb", "article", "articles")
+PRICING_HINTS = ("pricing", "price", "plans", "billing", "subscription")
+
+GENERIC_QUERY_TERMS = {
+    "a",
+    "an",
+    "and",
+    "anti",
+    "answer",
+    "answers",
+    "api",
+    "ceo",
+    "claim",
+    "compare",
+    "comparison",
+    "cost",
+    "current",
+    "did",
+    "direct",
+    "docs",
+    "founded",
+    "founder",
+    "help",
+    "how",
+    "info",
+    "information",
+    "is",
+    "latest",
+    "lookup",
+    "official",
+    "of",
+    "on",
+    "page",
+    "pages",
+    "price",
+    "prices",
+    "pricing",
+    "question",
+    "site",
+    "statement",
+    "the",
+    "to",
+    "today",
+    "verify",
+    "versus",
+    "vs",
+    "what",
+    "who",
+    "with",
+}
+
+MULTIPART_SUFFIXES = {
+    "co.uk",
+    "org.uk",
+    "ac.uk",
+    "com.au",
+    "co.il",
+    "co.jp",
+    "com.br",
+    "com.mx",
+    "com.tr",
+}
+
 TRACKING_PARAMS = {"fbclid", "gclid", "ref", "source"}
 
 
 def _tokenize(text: str) -> list[str]:
     return re.findall(r"[a-z0-9]+", text.lower())
+
+
+def _host_matches(hostname: str, candidates: set[str]) -> bool:
+    return any(hostname == item or hostname.endswith(f".{item}") for item in candidates)
+
+
+def _domain_family(hostname: str) -> str:
+    parts = [part for part in hostname.lower().split(".") if part]
+    if len(parts) <= 2:
+        return ".".join(parts)
+
+    last_two = ".".join(parts[-2:])
+    if last_two in MULTIPART_SUFFIXES:
+        return ".".join(parts[-3:])
+
+    if len(parts) >= 3:
+        last_three = ".".join(parts[-3:])
+        suffix = ".".join(parts[-2:])
+        if suffix in {"co.uk", "org.uk", "ac.uk", "co.il"}:
+            return last_three
+    return last_two
+
+
+def _family_tokens(hostname: str) -> set[str]:
+    family = _domain_family(hostname)
+    parts = family.split(".")
+    if len(parts) >= 2:
+        labels = parts[:-1]
+    else:
+        labels = parts
+    return set(_tokenize(" ".join(labels)))
+
+
+def _host_tokens(hostname: str) -> set[str]:
+    labels = [part for part in hostname.lower().split(".") if part]
+    meaningful = [label for label in labels if label not in GENERIC_HOST_LABELS]
+    return set(_tokenize(" ".join(meaningful)))
+
+
+def _query_focus_terms(question: str) -> set[str]:
+    return {
+        token
+        for token in _tokenize(question)
+        if token not in GENERIC_QUERY_TERMS and (len(token) > 2 or token.isdigit())
+    }
+
+
+def _path_labels(url: str) -> set[str]:
+    parsed = urlparse(url)
+    path = parsed.path.lower()
+    labels: set[str] = set()
+    if any(hint in parsed.netloc.lower() or f"/{hint}" in path for hint in DOC_HINTS):
+        labels.add("docs")
+    if any(hint in parsed.netloc.lower() or f"/{hint}" in path for hint in HELP_HINTS):
+        labels.add("help")
+    if any(f"/{hint}" in path for hint in PRICING_HINTS):
+        labels.add("pricing")
+    return labels
+
+
+def discover_preferred_domain_families(question: str, results: list[SearchResult]) -> set[str]:
+    focus_terms = _query_focus_terms(question)
+    if not focus_terms:
+        return set()
+
+    scores: dict[str, float] = {}
+    for result in results:
+        hostname = urlparse(result.url).netloc.lower()
+        if not hostname:
+            continue
+        if _host_matches(hostname, SOCIAL_HOSTS | COMMUNITY_HOSTS | MARKETPLACE_HOSTS):
+            continue
+
+        family = _domain_family(hostname)
+        family_terms = _family_tokens(hostname) | _host_tokens(hostname)
+        title_terms = set(_tokenize(result.title))
+        snippet_terms = set(_tokenize(result.snippet))
+        overlap = focus_terms & family_terms
+        if not overlap:
+            continue
+
+        score = 2.0 * len(overlap)
+        if focus_terms & title_terms:
+            score += 0.75
+        if focus_terms & snippet_terms:
+            score += 0.5
+        if "official" in result.title.lower() or "official" in result.snippet.lower():
+            score += 0.75
+        score += 0.5 * len(_path_labels(result.url))
+        if urlparse(result.url).path in {"", "/"}:
+            score += 0.25
+        scores[family] = scores.get(family, 0.0) + score
+
+    ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
+    return {family for family, score in ranked[:4] if score >= 2.0}
 
 
 def normalize_url(url: str) -> str:
@@ -60,6 +269,121 @@ def domain_bonus(url: str) -> float:
         if hostname == host or hostname.endswith(f".{host}"):
             return penalty
     return 0.0
+
+
+def infer_source_profile(
+    question: str,
+    url: str,
+    title: str,
+    *,
+    preferred_domain_families: set[str] | None = None,
+) -> dict[str, object]:
+    hostname = urlparse(url).netloc.lower()
+    family = _domain_family(hostname)
+    source_types: set[str] = set()
+    reasons: list[str] = []
+    preferred_domain_families = preferred_domain_families or set()
+
+    if _host_matches(hostname, SOCIAL_HOSTS):
+        source_types.add("social")
+    if _host_matches(hostname, COMMUNITY_HOSTS):
+        source_types.add("community")
+    if _host_matches(hostname, MARKETPLACE_HOSTS):
+        source_types.add("marketplace")
+    if _host_matches(hostname, REFERENCE_HOSTS):
+        source_types.add("reference")
+    if domain_bonus(url) > 0:
+        source_types.add("institutional")
+
+    source_types |= _path_labels(url)
+    if family in preferred_domain_families and "social" not in source_types and "marketplace" not in source_types:
+        source_types.add("official")
+        reasons.append("likely first-party domain")
+    else:
+        focus_terms = _query_focus_terms(question)
+        if focus_terms & _family_tokens(hostname) and "social" not in source_types and "marketplace" not in source_types:
+            source_types.add("entity_match")
+            reasons.append("domain matches query entity")
+
+    if "docs" in source_types:
+        reasons.append("documentation-style page")
+    if "help" in source_types:
+        reasons.append("help/support page")
+    if "pricing" in source_types:
+        reasons.append("pricing/billing page")
+    if "institutional" in source_types:
+        reasons.append("institutional domain")
+    if "social" in source_types:
+        reasons.append("social/profile page")
+    if "marketplace" in source_types:
+        reasons.append("marketplace listing")
+    if "reference" in source_types:
+        reasons.append("reference source")
+
+    return {
+        "domain_family": family,
+        "source_types": sorted(source_types),
+        "reasons": reasons,
+    }
+
+
+def _strategy_source_bonus(strategy_name: str, source_types: set[str]) -> tuple[float, list[str]]:
+    score = 0.0
+    reasons: list[str] = []
+
+    def add(condition: bool, value: float, reason: str) -> None:
+        nonlocal score
+        if condition and value:
+            score += value
+            reasons.append(reason)
+
+    add("official" in source_types, {
+        "direct_lookup": 2.0,
+        "latest_info": 2.0,
+        "verify_claim": 1.0,
+        "compare_entities": 2.5,
+        "price_validation": 3.0,
+        "community_discussion": 0.25,
+    }.get(strategy_name, 1.5), "official-domain boost")
+
+    add("entity_match" in source_types, 0.75, "entity-domain match")
+    add("docs" in source_types, {
+        "compare_entities": 1.0,
+        "price_validation": 0.5,
+        "verify_claim": 0.5,
+    }.get(strategy_name, 0.25), "docs-page boost")
+    add("help" in source_types, {
+        "price_validation": 1.0,
+        "latest_info": 0.5,
+        "compare_entities": 0.5,
+    }.get(strategy_name, 0.25), "help-page boost")
+    add("pricing" in source_types, {
+        "price_validation": 1.5,
+        "compare_entities": 1.25,
+    }.get(strategy_name, 0.25), "pricing-page boost")
+    add("institutional" in source_types, {
+        "verify_claim": 1.5,
+        "latest_info": 0.5,
+    }.get(strategy_name, 0.25), "institutional-domain boost")
+
+    add("social" in source_types, {
+        "latest_info": -1.75,
+        "compare_entities": -1.5,
+        "price_validation": -2.0,
+        "verify_claim": -1.5,
+        "community_discussion": -0.25,
+    }.get(strategy_name, -1.0), "social-source penalty")
+    add("community" in source_types, {
+        "latest_info": -1.25,
+        "verify_claim": -1.0,
+        "price_validation": -1.25,
+        "community_discussion": 1.5,
+    }.get(strategy_name, -0.75), "community-source signal")
+    add("marketplace" in source_types, {
+        "price_validation": -1.5,
+        "compare_entities": -0.75,
+    }.get(strategy_name, -0.5), "marketplace penalty")
+    return score, reasons
 
 
 def _parse_datetime(value: str | None) -> datetime | None:
@@ -137,6 +461,9 @@ def rank_documents(
     question: str,
     docs: list[PageDocument],
     recency_weight: float = 0.0,
+    *,
+    strategy_name: str = "direct_lookup",
+    preferred_domain_families: set[str] | None = None,
 ) -> list[Evidence]:
     question_terms = set(_tokenize(question))
     ranked: list[Evidence] = []
@@ -146,7 +473,23 @@ def rank_documents(
         doc_terms = set(_tokenize(content))
         overlap = float(len(question_terms & doc_terms))
         quote = _best_quote(question, content)
-        score = overlap + domain_bonus(doc.url) + (recency_weight * recency_bonus(doc.published_at))
+        source_profile = infer_source_profile(
+            question,
+            doc.url,
+            doc.title or doc.url,
+            preferred_domain_families=preferred_domain_families,
+        )
+        source_types = set(source_profile["source_types"])
+        source_bonus, source_reasons = _strategy_source_bonus(strategy_name, source_types)
+        recency_value = recency_weight * recency_bonus(doc.published_at)
+        score = overlap + domain_bonus(doc.url) + recency_value + source_bonus
+        ranking_reasons: list[str] = []
+        if overlap:
+            ranking_reasons.append(f"term overlap ({int(overlap)})")
+        ranking_reasons.extend(source_profile["reasons"])
+        ranking_reasons.extend(source_reasons)
+        if recency_value > 0:
+            ranking_reasons.append("recent source")
 
         ranked.append(
             Evidence(
@@ -156,7 +499,13 @@ def rank_documents(
                 summary=_summary(content),
                 score=score,
                 published_at=doc.published_at,
-                metadata={**doc.metadata, "extraction_method": doc.extraction_method},
+                metadata={
+                    **doc.metadata,
+                    "extraction_method": doc.extraction_method,
+                    "domain_family": source_profile["domain_family"],
+                    "source_types": source_profile["source_types"],
+                    "ranking_reasons": ranking_reasons,
+                },
             )
         )
 
